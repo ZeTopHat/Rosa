@@ -1,0 +1,7 @@
+<!-- Error page that displays when someone attempts to move an SR without selecting a queue -->
+<div class="onlycontainer">
+<%= flash.now[:notice] = "You need to select a queue from the dropdown when moving an SR." %>
+<br \>
+<br \>
+<%= link_to 'Back', {:action => 'index' } %>
+</div>

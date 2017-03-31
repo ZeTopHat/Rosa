@@ -1,0 +1,27 @@
+<!-- id is used by reload.js to refresh only the index page in set intervals -->
+<body id="index">
+<!-- Divs on page are ordered and rendered below -->
+<div class="headercontainer">
+  <p>Welcome! - <%= render 'links' %></p>
+</div>
+
+<div class="leftcontainer">
+  <p>SRs in queue</p>
+  <%= render 'list' %>
+</div>
+
+<div class="rightcontainer">
+  <p>SRs Taken</p>
+  <%= render 'taken' %>
+</div>
+
+<div class="bottomleftcontainer">
+  <p>Team Stats</p>
+  <%= render 'stats' %>
+</div>
+
+<div class="bottomrightcontainer">
+  <p style="text-align:center">Recent History</p>
+  <%= render 'history' %>
+</div>
+</body>

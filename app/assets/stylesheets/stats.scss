@@ -1,0 +1,22 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Used by the stats partial page on the left
+.statsleft {
+  width: 30%;
+  margin: 15px auto;
+  float: left;
+  background: black;
+  background-position: 20%;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  text-align: center;
+}
+
+// Used by the stats partial page to put a table on the right
+.statsright {
+  float: right;
+  background-position: 80%;
+  text-align: center;
+}

@@ -1,0 +1,7 @@
+<!-- Error page that displays when someone attempts to take an SR that has already been taken or queue has been changed in siebel database. -->
+<div class="onlycontainer">
+<%= flash.now[:notice] = "Could not grant ownership. Was its queue recently changed or did someone already take the SR?" %>
+<br \>
+<br \>
+<%= link_to 'Back', {:action => 'index' } %>
+</div>

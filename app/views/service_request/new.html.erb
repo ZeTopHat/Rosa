@@ -1,0 +1,33 @@
+<!-- This page is password protected -->
+<h1>Add new Service Request</h1>
+
+<!-- Form built using rails form_tag tool -->
+<%= form_tag :action => 'create' do %>
+
+  <!-- You can enter the SR Number -->
+  <p><label for = "sr_number">Number</label>:
+  <%= text_field 'service_requests', 'number' %></p>
+
+  <!-- description -->
+  <p><label for = "sr_description">Description</label>:
+  <%= text_area 'service_requests', 'briefdes' %></p>
+
+  <!-- Set the owner of the SR from the users in the database -->
+  <p><label for = "sr_owner">Owner</label>:
+  <%= collection_select(:service_requests, :username_id, @usernames, :id, :name, prompt: true) %></p>
+
+  <!-- If you don't set it to take, the refresh_queue rake task will destroy the SR a few seconds later -->
+  <p><label for = "sr_taken">Taken?</label>:
+  <%= check_box 'service_requests', 'taken' %></p>
+
+  <!-- Set whether the SR is returning -->
+  <p><label for = "sr_returned">Returning?</label>:
+  <%= check_box 'service_requests', 'returned' %></p>
+
+  <%= submit_tag "Create" %>
+
+<% end -%>
+<!-- End of form_tag tool -->
+
+<!-- Link back to index page -->
+<%= link_to 'Back', {:action => 'index'} %>

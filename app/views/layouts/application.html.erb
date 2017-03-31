@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!-- This page is a wrapper on all the other html pages on the site. They are pulled in through the yield. -->
+<html>
+<head>
+
+  <title>Rosa <%= render 'service_request/title' %></title>
+  <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application', 'all' => true %>
+  <%= csrf_meta_tags %>
+
+</head>
+
+<%= yield %>
+
+</html>
+
+

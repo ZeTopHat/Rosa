@@ -1,0 +1,6 @@
+# This is for queues that belong to the team
+# After adjusting this file you need to run "rake queues_update"
+GLOBAL_FL_SERVER_OS_LINUX
+GLOBAL_FL_WEB
+GLOBAL_FL_COMM_LINUX
+GLOBAL_FL_SLED

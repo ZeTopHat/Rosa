@@ -1,0 +1,13 @@
+<% # This is for the text shown in the tab of the Rosa Page. It will give a number of how many SRs are in queue.
+    @count = 0
+    ServiceRequest.all.each do |request|
+      # Only Count SRs in queue that have no owner and aren't set to unassign
+      if request.username.blank?
+        unless request.unassign
+          @count = @count + 1
+        end
+      end
+    end
+%>
+<%= @count %>
+

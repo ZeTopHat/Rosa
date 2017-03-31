@@ -1,0 +1,184 @@
+<!-- This is the table showing Team Stats -->
+<!-- Import sorttable javascript for the table -->
+<table class="sortable" border="1">
+<thead>
+<tr>
+<!-- Column Headers for the table. Hover descriptions pull from the titles. -->
+<th title="Employee Username">Name</th>
+<th title="Current total of SRs closed for the Quarter">Closed</th>
+<th title="Currently owned and open service requests">Open</th>
+<th title="Percentage of surveys marked resolved to satisfaction">R2S</th>
+<th title="Percentage of surveys with a 4 or higher on TSE satisfaction">TSES</th>
+<th title="Percentage of service requests closed within 1 day">RU1D</th>
+<th title="Percentage of service requests closed within 7 days">RU7D</th>
+</tr>
+</thead>
+<tbody>
+<!-- Add Arrays for averages -->
+<% closedsrs = Array.new %>
+<% opensrs = Array.new %>
+<% teamtime1 = Array.new %>
+<% teamtime7 = Array.new %>
+<% teamsat1 = Array.new %>
+<% teamsat2 = Array.new %>
+<% teamtotal = Array.new %>
+<% teamtotal1 = Array.new %>
+<% teamtotal2 = Array.new %>
+<!-- create a row for each user -->
+<% Username.all.each do |user| %> 
+  <!-- Added variables here for greater scope from logic in column 2 down to columns 6 and 7 -->
+  <% percentage1 = 0.0 %>
+  <% percentage7 = 0.0 %>
+  <% total = 0 %>
+  <tr>
+
+  <!-- This is what is displaying in column 1 -->
+  <td><%= link_to user.name, :action => "show_usernames", :id => user.id %></td>
+
+  <td style="text-align:center">
+    <% File.open("app/assets/data/closedsrs_#{user.name}", "r:utf-8") do |content| %>
+      <% read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+
+      <!-- This is what is displaying in column 2 -->
+      <%= read_content.scan(/#{user.name}/).length %>
+
+      <!-- This is for the team average calculation -->
+      <% closedsrs << read_content.scan(/#{user.name}/).length %>
+      <!-- Creating data needed for final columns about "days to closed" since file is already open -->
+      <% marker = "<" %>
+      <!-- Creating an array of all the listed numbers regarding "days to closed" -->
+      <% totalarray = read_content.scan(/([0-9]+)#{Regexp.escape(marker)}/).flatten.map(&:to_i) %>
+      <% marginarray1 = Array.new %>
+      <% marginarray7 = Array.new %>
+      <% totalarray.each do |item| %>
+        <!-- Creating a new array based on the total array but only including numbers less than 2 (SRs closed in 1 day or less) -->
+        <% if item < 2 %>
+          <% marginarray1 << item %>
+        <% end %>
+        <!-- Creating a new array based on the total array but only including numbers less than 8 (SRs closed in 7 days or less) -->
+        <% if item < 8 %>  
+          <% marginarray7 << item %>
+        <% end %>
+      <% end %>
+      <% margin1 = marginarray1.length %>
+      <% margin7 = marginarray7.length %>
+      <% total = totalarray.length %>
+      <!-- inserting individual totals as an array into array for the team total -->
+      <% teamtotal << total %>
+      <!-- Calculating percentage of SRs closed in 1 and 7 days -->
+      <% percentage1 = margin1.to_f / total.to_f * 100 %>
+      <% percentage7 = margin7.to_f / total.to_f * 100 %>
+    <% end %>
+  </td>
+
+  <td style="text-align:center">
+    <% File.open("app/assets/data/opensrs_#{user.name}", "r:utf-8") do |content| %>
+      <% read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+      
+      <!-- This is what is displaying in column 3 -->
+      <%= read_content.scan(/#{user.name}/).length %>
+
+      <!-- This is for the team average calculation -->
+      <% opensrs << read_content.scan(/#{user.name}/).length %>
+    <% end %>
+  </td>
+  <!-- I'm delaying adding the next td, until I'm done creating some things -->
+  <% File.open("app/assets/data/surveys_#{user.name}", "r:utf-8") do |content| %>
+    <% read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+    <% marker1 = "<" %>
+    <% marker2 = "||" %>
+    <!-- Creating two arrays. The first grabs the numbers for "resolved to satisfaction" and the second grabs the numbers for "TSE satisfaction" -->
+    <% total1array = read_content.scan(/([0-9]+)#{Regexp.escape(marker1)}/).flatten.map(&:to_i) %>
+    <% total2array = read_content.scan(/#{Regexp.escape(marker2)}([0-9]+)/).flatten.map(&:to_i) %>
+    <% margin1array = Array.new %>
+    <% margin2array = Array.new %>
+    <% total1array.each do |item| %>
+      <!-- "Resolved to satisfaction" is based off of 1's for yes's and 0's for no's. This grabs all the yes's to place in a new array for comparison. -->
+      <% if item > 0 %>
+        <% margin1array << item %>
+      <% end %>
+    <% end %>
+    <% total2array.each do |item| %>
+      <!-- "TSE satisfaction" is based on a scale between 1 and 5. Only 4 and 5 are considered good ratings. This creates a new array grabbing only good ratings for comparision. -->
+      <% if item > 3 %>
+        <% margin2array << item %>
+      <% end %>
+    <% end %>
+    <% margin1 = margin1array.length %>
+    <% margin2 = margin2array.length %>
+    <!-- We can't have a total variable because of the earlier established variables with that name for columns 6 and 7 -->
+    <% total1 = total1array.length %>
+    <% total2 = total2array.length %>
+    <!-- Taking individual results and adding them to the team arrays for the team totals later -->
+    <% teamtotal1 << total1 %>
+    <% teamtotal2 << total2 %>
+    <!-- We can't have a percentage1 or percentage7 variable because of the earlier established variables with those names for columns 6 and 7 -->
+    <% percent1 = margin1.to_f / total1.to_f * 100 %>
+    <% percent2 = margin2.to_f / total2.to_f * 100 %>
+    <!-- I'm starting this td late so that the total1array could be built and I could include it in the title -->
+  <td title="Sample Size: <%= total1 %>" style="text-align:center">
+    <!-- This is what displays in column 4 -->
+    <%= percent1.round(1) %><small>%</small>
+    <!-- This is for the team average calculation -->
+    <% teamsat1 << percent1 %>
+
+  </td>
+  <td title="Sample Size: <%= total2 %>" style="text-align:center">
+    <!-- This is what displays in column 5 -->
+    <%= percent2.round(1) %><small>%</small>
+    <!-- This is for the team average calculation -->
+    <% teamsat2 << percent2 %>
+  <!-- Finishing block and closing surveys file -->
+  <% end %>
+  </td>
+  <td title="Sample Size: <%= total %>" style="text-align:center">
+    <!-- This is what is displaying in column 6 -->
+    <%= percentage1.round(1) %><small>%</small>
+    <!-- This is for the team average calculation -->
+    <% teamtime1 << percentage1 %>
+  </td>
+  <td title="Sample Size: <%= total %>" style="text-align:center">
+    <!-- This is what is displaying in column 7 -->
+    <%= percentage7.round(1) %><small>%</small>
+    <!-- This is for the team average calculation -->
+    <% teamtime7 << percentage7 %>
+  </tr>
+<!-- This is the end of the parsing through individual users -->
+<% end %>
+</tbody>
+<tfoot>
+<tr>
+<td>Average</td>
+<td title="Total closed: <%= closedsrs.inject(:+) %>" style="text-align:center">
+<% closedsrs_avg = closedsrs.inject(:+) / closedsrs.length %>
+<!-- Display for team value column 2 -->
+<%= closedsrs_avg %>
+</td>
+<td title="Total open: <%= opensrs.inject(:+) %>" style="text-align:center">
+<% opensrs_avg = opensrs.inject(:+) / opensrs.length %>
+<!-- Display for team value column 3 -->
+<%= opensrs_avg %>
+</td>
+<td title="Sample Size: <%= teamtotal1.inject(:+) %>" style="text-align:center">
+<% teamsat1_avg = teamsat1.inject(:+) / teamsat1.length %>
+<!-- Display for team value column 4 -->
+<%= teamsat1_avg.round(1) %><small>%</small>
+</td>
+<td title="Sample Size: <%= teamtotal2.inject(:+) %>" style="text-align:center">
+<% teamsat2_avg = teamsat2.inject(:+) / teamsat2.length %>
+<!-- Display for team value column 5 -->
+<%= teamsat2_avg.round(1) %><small>%</small>
+</td>
+<td title="Sample Size: <%= teamtotal.inject(:+) %>" style="text-align:center">
+<% teamtime_avg1 = teamtime1.inject(:+) / teamtime1.length %>
+<!-- Display for team value column 6 -->
+<%= teamtime_avg1.round(1) %><small>%</small>
+</td>
+<td title="Sample Size: <%= teamtotal.inject(:+) %>" style="text-align:center">
+<% teamtime_avg7 = teamtime7.inject(:+) / teamtime7.length %>
+<!-- Display for team value column 7 -->
+<%= teamtime_avg7.round(1) %><small>%</small>
+</td>
+</tr>
+</tfoot>
+</table>

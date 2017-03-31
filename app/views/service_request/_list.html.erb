@@ -1,0 +1,142 @@
+<!-- partial page for rendering queue on the index page -->
+
+<!-- Build an array only including SRs that aren't taken and aren't unassigned in the database -->
+<% queuearray = Array.new %>
+  <% ServiceRequest.all.each do |sr| %>
+    <% unless sr.taken %>
+      <% unless sr.unassign %>
+        <% queuearray << sr %>
+      <% end %>
+    <% end %>
+  <% end %>
+<!-- Team Update, if any, can be placed below -->
+
+<!-- If the above created array is empty display this message -->
+<% if queuearray.empty? %>
+  <p>There aren't any SRs in queue.</p>
+<!-- If it's not empty then display the SRs in queue -->
+<% else %>
+  <!-- Creating arrays for sorting SRs in queue -->
+  <% usa = Array.new %>
+  <% emea = Array.new %>
+  <% asiapac = Array.new %>
+  <% latin = Array.new %>
+  <% canada = Array.new %>
+  <% other = Array.new %>
+
+  <!-- function for displaying each SR as an item -->
+  <% def displayitem(request) %>
+    <li>
+    <!-- Minutes passed since the object was created in Rosa -->
+    <% timeW = request.created_at.to_i / 60 %>
+    <% timeN = Time.now.to_i / 60 %>
+    [<%= timeN - timeW %> min]
+
+    <!-- Test boolean returned to see if it is a returning service request -->
+    <% if request.returned %>
+    Returning -
+    <% end %>
+    <!-- This will show the SR number but also make it a link to the details of that SR using the 'show' action -->
+    <%= link_to request.number, {:action => 'show', :id => request.id} -%>
+    -
+    <%= request.locale %>
+    -
+    <%= request.hours %>
+    -
+    <%= request.priority %>
+    -
+    <%= request.contactvia %>
+    -
+    <!-- Truncating the briefdescription just in case it's super long so it doesn't make the list of SRs hard to read -->
+    <%= truncate(request.briefdes, :length => 50) %>
+    <!-- Make an 'Assign' link for the SR so that it can be edited with the new username -->
+    <b> <%= link_to 'Assign', {:action => "edit", :id => request.id} %></b> 
+    <b> <%= link_to 'Move', {:action => "move", :id => request.id} %></b>
+    </li>
+  <% end %>
+
+  <!-- block to sort SRs into their respective arrays --> 
+  <% ServiceRequest.all.each do |request| %>
+    <!-- Only display SRs in queue that have no owner and that aren't unassigned -->
+    <% if request.username.blank? %>
+      <% unless request.unassign %>
+        <% case request.locale %>
+        <% when "USA" %>
+          <% usa << request %>
+        <% when "EMEA" %>
+          <% emea << request %>
+        <% when "ASIAPAC" %>
+          <% asiapac << request %>
+        <% when "LATIN AMERICA" %>
+          <% latin << request %>
+        <% when "CANADA" %>
+          <% canada << request %>
+        <% else %>
+          <!-- In case locale is missing or a new one is created -->
+          <% other << request %>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+
+  <!-- Order the priorities so that the queues can be ordered this same way -->
+  <% priorities = ["Critical", "High", "Medium", "Low"] %>
+
+  <!-- Final creation of the organized list -->
+  <% unless other.empty? %>
+    <ul>
+    <% other.sort_by{|x| priorities.index x.priority}.each do |request| %>
+      <% displayitem(request) %>
+    <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <% unless usa.empty? %>
+    <u>USA</u>
+    <ul>
+    <% usa.sort_by{|x| priorities.index x.priority}.each do |request| %>
+      <% displayitem(request) %>
+    <% end %>
+    </ul>
+    <br>
+  <% end %> 
+  <% unless canada.empty? %>
+    <u>CANADA</u>
+    <ul>
+    <% canada.sort_by{|x| priorities.index x.priority}.each do |request| %>
+      <% displayitem(request) %>
+    <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <% unless asiapac.empty? %>
+    <u>ASIAPAC</u>
+    <ul>
+    <% asiapac.sort_by{|x| priorities.index x.priority}.each do |request| %>
+      <% displayitem(request) %>
+    <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <% unless latin.empty? %>
+    <u>LATIN AMERICA</u>
+    <ul>
+    <% latin.sort_by{|x| priorities.index x.priority}.each do |request| %>
+      <% displayitem(request) %>
+    <% end %>
+    </ul>
+    <br>
+  <% end %>
+  <% unless emea.empty? %>
+    <u>EMEA</u>
+    <ul>
+    <% emea.sort_by{|x| priorities.index x.priority}.each do |request| %>
+      <% displayitem(request) %>
+    <% end %>
+    </ul>
+    <br>
+  <% end %>
+<% end %>
+
+<!-- Temporary abilbity to make new srs for testing. This is password protected by the controller -->
+<p><%= link_to "Add new SR", {:action => 'new' }%></p>

@@ -1,0 +1,7 @@
+# This is for queues that do not belong to the team
+# After adjusting this file you need to run "rake queues_update"
+EMEA_UNASSIGNED
+GLOBAL_FL_EDIR
+GLOBAL_FL_GW
+SADMIN
+GLOBAL_FL_SERVER_OES

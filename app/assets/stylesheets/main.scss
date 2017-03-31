@@ -1,0 +1,146 @@
+// Place all the styles related to the home controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+// Main site characteristics
+body {
+  background: grey;
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  line-height: 1.25;
+  color: cyan;
+}
+
+// Used by the top header container on the index page
+.headercontainer {
+  width: 750px;
+  margin: 10px auto;
+  padding: 5px;
+  background: black;
+  background-size: auto;
+  background-position: top;
+  background-attachment: fixed;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  text-align: center;
+
+  // Different link behaviours for this particular container
+  a:link, a:visited {
+    color: lightblue;
+    text-decoration: underline;
+  }
+
+  a:hover, a:active {
+    color: cyan;
+    text-decoration: underline;
+  }
+
+
+}
+
+// Used by the "SRs in queue" container on the left on the index page
+.leftcontainer {
+  width: 42%;
+  margin: 15px auto;
+  float: left;
+  background: black;
+  background-position: 20%;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  text-align: center;
+
+  ul {
+    text-align: left;
+  }
+}
+
+// Used by the "SRs Taken" container on the right on the index page
+.rightcontainer {
+  width: 57%;
+  margin: 15px auto;
+  float: right;
+  background: black;
+  background-position: 80%;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  text-align: center;
+}
+
+// Used by the "Team Stats" container on the bottom left of the index page
+.bottomleftcontainer {
+  width: 59%;
+  clear: both;
+  float: left;
+  background: black;
+  background-position: 80%;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  position: relative;
+  padding: 1px;
+  bottom: 0;
+  text-align: center;
+  margin: 0 auto;
+}
+
+// Used by the "Team Stats" container on the bottom right of the index page
+.bottomrightcontainer {
+  width: 38%;
+  float: right;
+  background: black;
+  background-position: 20%;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  position: relative;
+  padding: 10px;
+  bottom: 0;
+  text-align: left;
+  margin: 0 auto;
+}
+
+// Used by the error page when an SR has already been taken
+.onlycontainer {
+  width: 750px;
+  margin: 18% auto;
+  padding: 5px;
+  background: black;
+  background-size: auto;
+  background-position: top;
+  background-attachment: fixed;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 40px;
+  text-align: center;
+  // Different link behaviours for this particular container
+  a:link, a:visited {
+    color: red;
+    text-decoration: underline;
+  }
+
+  a:hover, a:active {
+    color: lightblue;
+    text-decoration: underline;
+  }
+
+
+}
+
+// General table behaviours
+table, th, td {
+  border: 1px solid black;
+  margin: 8px auto;
+  padding: 0px;
+  text-align: left;
+}
+
+// General link behaviours
+a:link, a:visited {
+  color: cyan;
+  text-decoration: none;
+}
+a:hover, a:active {
+  color: lightblue;
+  text-decoration: underline;
+}
+table.sortable th:not(.sorttable_sorted):not(.sorttable_sorted_reverse):not(.sorttable_nosort):after { 
+    content: " \25B4\25BE" 
+}

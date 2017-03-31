@@ -1,0 +1,13 @@
+# After adjusting this file you need to run "rake users_update". 
+# If there is then a new user with no prior data created in Rosa you'll need to run "rake refresh_data" to initialize that data. 
+# Rosa will give an error until that is done. 
+# Rebuilding the users list will clear the "SRs Taken" table so it's recommended to either do this at the very beginning of the day or the very end of the day.
+DOLUGO
+FGARAY
+GMARCROFT
+JCHANDLER
+JLAM
+JROARK
+KBAILEY
+TMCCLANAHAN
+TOLSEN

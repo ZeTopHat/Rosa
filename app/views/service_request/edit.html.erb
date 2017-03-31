@@ -1,0 +1,14 @@
+<h1>Change ownership of SR# <%= @service_request.number %></h1>
+
+<!-- ruby code to initialize the form for the specified service request. -->
+<%= form_for @service_request, :url =>{:action => "update", :id =>@service_request} do |f| %>
+
+<!-- Drop down -->
+<p>Owner: <%= f.collection_select :username_id, Username.all, :id, :name, {:include_blank => "--Select User--"} %></p>
+
+<!-- Button to submit Changes -->
+<%= f.submit "Save changes" %>
+<% end %>
+
+<!-- Link back to the index page -->
+<%= link_to 'Back', {:action => 'index' } %>

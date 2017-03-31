@@ -1,0 +1,21 @@
+<!-- This page is to provide a list of all SRs owned by the user specified -->
+<h1><%= @username.name -%></h1>
+
+<!-- ruby code to initialize the form for username excuses. -->
+<%= form_for @username, :url =>{:action => "userupdate", :id =>@username} do |f| %>
+
+  <p>Excuse: <%= f.text_field 'excuse' %></p>
+
+  <!-- Button to submit Changes -->
+  <%= f.submit "Save changes" %>
+<% end %>
+
+<ul>
+  <!-- Loop through and link each service request they own using the each block -->
+  <% @username.service_requests.each do |request| %>
+    <li><%= link_to request.number, :action => "show", :id => request.id =%></li>
+  <% end %>
+</ul>
+
+<!-- Link back to the index page -->
+<%= link_to 'Back', {:action => 'index'} %>

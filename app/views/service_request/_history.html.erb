@@ -1,0 +1,23 @@
+<!-- this is a partial page to show the recent history of who's taken SRs on the index page -->
+<!-- This is an array to compare the lines from the history file to all registered users and queues in the database -->
+<% usersngroups = Array.new %>
+<% File.open("app/assets/data/history", "r:utf-8") do |content| %>
+  <% read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+  <!-- grabbing the users -->
+  <% Username.all.each do |user| %>
+    <% usersngroups << user.name %>
+  <% end %>
+  <!-- grabbing the queues -->
+  <% Group.all.each do |queue| %>
+    <% usersngroups << queue.name %>
+  <% end %>
+
+  <!-- pull out the words from each line to see if it has one of the queues or groups -->
+  <% read_content.each_line do |line| %>
+    <% words = line.split(" ") %>
+    <!-- only print the line if it has a match -->
+    <% unless (usersngroups & words).empty? %>
+      <%= line %><br>
+    <% end %>
+  <% end %>
+<% end %>

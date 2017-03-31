@@ -1,0 +1,18 @@
+<!-- this is rendered on the index page to show a table of taken SRs by each user. -->
+<table style="width:90%" id = "usernames">
+  <!-- Create a row for each user -->
+  <% Username.all.each do |user| %>
+    <tr>
+      <!-- A link to the user's page of listed SRs -->
+      <td style="width: 20%;"><%= link_to user.name, :action => "show_usernames", :id => user.id %></td>
+      <!-- This is what lists each of the user's owned service requests and dislpays them -->
+      <td style="width: 80%;">
+        <!-- List a users reason for not being available before any SRs owned, if any. -->
+        <%= user.excuse %>
+        <% user.service_requests.each do |request| %>
+        <%= link_to request.number, :action => "show", :id => request.id =%>   
+      <% end %></td>
+    </tr>
+  <% end %>
+</table>
+
