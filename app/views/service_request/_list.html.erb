@@ -3,13 +3,12 @@
 <!-- Build an array only including SRs that aren't taken and aren't unassigned in the database -->
 <% queuearray = Array.new %>
   <% ServiceRequest.all.each do |sr| %>
-    <% unless sr.taken %>
-      <% unless sr.unassign %>
-        <% queuearray << sr %>
-      <% end %>
+    <% unless sr.taken || sr.unassign %>
+      <% queuearray << sr %>
     <% end %>
   <% end %>
 <!-- Team Update, if any, can be placed below -->
+
 
 <!-- If the above created array is empty display this message -->
 <% if queuearray.empty? %>
@@ -23,13 +22,15 @@
   <% latin = Array.new %>
   <% canada = Array.new %>
   <% other = Array.new %>
+  <% queues = Hash[ 'usa' => usa, 'canada' => canada, 'latin america' => latin, 'asiapac' => asiapac, 'other' => other, 'emea' => emea] %>
 
-  <!-- function for displaying each SR as an item -->
+<!-- function for displaying each SR as an item -->
   <% def displayitem(request) %>
     <li>
     <!-- Minutes passed since the object was created in Rosa -->
     <% timeW = request.created_at.to_i / 60 %>
     <% timeN = Time.now.to_i / 60 %>
+    
     [<%= timeN - timeW %> min]
 
     <!-- Test boolean returned to see if it is a returning service request -->
@@ -58,23 +59,21 @@
   <!-- block to sort SRs into their respective arrays --> 
   <% ServiceRequest.all.each do |request| %>
     <!-- Only display SRs in queue that have no owner and that aren't unassigned -->
-    <% if request.username.blank? %>
-      <% unless request.unassign %>
-        <% case request.locale %>
-        <% when "USA" %>
-          <% usa << request %>
-        <% when "EMEA" %>
-          <% emea << request %>
-        <% when "ASIAPAC" %>
-          <% asiapac << request %>
-        <% when "LATIN AMERICA" %>
-          <% latin << request %>
-        <% when "CANADA" %>
-          <% canada << request %>
-        <% else %>
-          <!-- In case locale is missing or a new one is created -->
-          <% other << request %>
-        <% end %>
+    <% if request.username.blank? && !request.unassign %>
+      <% case request.locale %>
+      <% when "USA" %>
+        <% usa << request %>
+      <% when "EMEA" %>
+        <% emea << request %>
+      <% when "ASIAPAC" %>
+        <% asiapac << request %>
+      <% when "LATIN AMERICA" %>
+        <% latin << request %>
+      <% when "CANADA" %>
+        <% canada << request %>
+      <% else %>
+        <!-- In case locale is missing or a new one is created -->
+        <% other << request %>
       <% end %>
     <% end %>
   <% end %>
@@ -83,58 +82,16 @@
   <% priorities = ["Critical", "High", "Medium", "Low"] %>
 
   <!-- Final creation of the organized list -->
-  <% unless other.empty? %>
-    <ul>
-    <% other.sort_by{|x| priorities.index x.priority}.each do |request| %>
-      <% displayitem(request) %>
+  <% queues.each do |key, value| %>
+    <% unless value.empty? %>
+      <u><%= key.to_s.upcase %></u>
+      <ul>
+      <% value.sort_by{|x| priorities.index x.priority}.each do |request| %>
+        <% displayitem(request) %>
+      <% end %>
+      </ul>
+      <br>
     <% end %>
-    </ul>
-    <br>
-  <% end %>
-  <% unless usa.empty? %>
-    <u>USA</u>
-    <ul>
-    <% usa.sort_by{|x| priorities.index x.priority}.each do |request| %>
-      <% displayitem(request) %>
-    <% end %>
-    </ul>
-    <br>
-  <% end %> 
-  <% unless canada.empty? %>
-    <u>CANADA</u>
-    <ul>
-    <% canada.sort_by{|x| priorities.index x.priority}.each do |request| %>
-      <% displayitem(request) %>
-    <% end %>
-    </ul>
-    <br>
-  <% end %>
-  <% unless asiapac.empty? %>
-    <u>ASIAPAC</u>
-    <ul>
-    <% asiapac.sort_by{|x| priorities.index x.priority}.each do |request| %>
-      <% displayitem(request) %>
-    <% end %>
-    </ul>
-    <br>
-  <% end %>
-  <% unless latin.empty? %>
-    <u>LATIN AMERICA</u>
-    <ul>
-    <% latin.sort_by{|x| priorities.index x.priority}.each do |request| %>
-      <% displayitem(request) %>
-    <% end %>
-    </ul>
-    <br>
-  <% end %>
-  <% unless emea.empty? %>
-    <u>EMEA</u>
-    <ul>
-    <% emea.sort_by{|x| priorities.index x.priority}.each do |request| %>
-      <% displayitem(request) %>
-    <% end %>
-    </ul>
-    <br>
   <% end %>
 <% end %>
 

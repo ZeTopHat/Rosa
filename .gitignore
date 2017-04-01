@@ -32,6 +32,7 @@ tmp/
 # Ignore confidential files
 config/confidential.json
 app/assets/data/
+config/secrets.yml
 
 # Other home files
 .ssh/

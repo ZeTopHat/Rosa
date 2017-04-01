@@ -14,6 +14,7 @@ class ServiceRequestController < ApplicationController
   def index
   end
 
+  # Function used in refresh to update queue listing from qmon
   def initqmon
     qmonscope = Array.new
     Group.all.each do |queue|
@@ -25,6 +26,7 @@ class ServiceRequestController < ApplicationController
     `for i in #{qmonscope.join(" ")} ; do qmon -qv $i ; done | awk '{ print $2}' >app/assets/data/queue`
   end
 
+  # Function used in refresh to trim the queue
   def trimqueue(content)
     # Destroy any service requests not taken by someone in the database or that isn't in the queue
     ServiceRequest.all.each do |exists|
@@ -36,6 +38,7 @@ class ServiceRequestController < ApplicationController
     end
   end
 
+  # Function used in refresh to prevent duplicates and non-srnumber lines
   def checkgate(sr_number)
     # Discards any lines that aren't only numbers
     if ( "#{sr_number}" =~ /^[0-9]+$/)
@@ -60,11 +63,8 @@ class ServiceRequestController < ApplicationController
 
     initqmon()
 
-    queue_content = ""
     # Read from file just created
-    File.open("app/assets/data/queue", "r:utf-8") do |r|
-      queue_content = r.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-    end
+    queue_content = File.open("app/assets/data/queue", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
 
     trimqueue(queue_content)
 
@@ -76,79 +76,25 @@ class ServiceRequestController < ApplicationController
 
       if $gate
 
-# rather than mulitple array variables and honed array variables, create one array variable based on the <thml> tage at beginning, and one honed veriable based on <br> and use all items with one array. Eventaully rather than depending on the array order, use the = sign to split and convert each item into a hash with the key and value
-
         # Creating variables outside of their blocks so the variables have a wider scope than their blocks and can be used in the creation of the object
-        honed_desarray = []
-        honed_barray = []
-        honed_stamparray = []
-        honed_crestamparray = []
-        honed_localearray = []
-        honed_entitlementarray = []
-        honed_priorityarray = []
-        honed_queuearray = []
-        honed_accountarray = []
-        honed_hoursarray = []
-        honed_contactarray = []
         returnedvar = false
         ltssvar = false
-        sr_info = ""
         
-        uri = open("#{$conf_json['sr_info']}#{srnum}", "r:utf-8") do |content|
-          # Grabbing longdes and lastact variables
-          read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-          desarray = read_content.split("DESC_TEXT = ")
-          honed_desarray = desarray[1].split("X_LAST_ACT_COMMENT = ")
-          # There is not always a Last Act Comment, this is to avoid an error in the creation of the object
-          if honed_desarray[1].nil?
-            honed_desarray[1] = ""
-          end
+        # pulling down SR content, organizing html content by splitting into an array twice then converting to a hash. (why couldn't it be json?? (╯°□°)╯︵ ┻━┻) 
+        read_content = open("#{$conf_json['sr_info']}#{srnum}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        content_array = read_content.split("<HTML>\r\n   ", 2)[1].split("<br>")
+        sr_content = Hash[content_array.map { |item| item.split(" = ", 2) }]
 
-          # Grabbing briefdes
-          barray = read_content.split("SR_TITLE = ")
-          honed_barray = barray[1].split("<br>")
-          # Last Act Stamp
-          stamparray = read_content.split("ACTL_RESP_TS = ")
-          honed_stamparray = stamparray[1].split("<br>")
-          # Locale
-          localearray = read_content.split("ORG = ")
-          honed_localearray = localearray[1].split("<br>")
-          # Created Stamp
-          crestamparray = read_content.split("CREATED = ")
-          honed_crestamparray = crestamparray[1].split("<br>")
-          # Entitlement
-          entitlementarray = read_content.split("X_SUPPORT_PROG = ")
-          honed_entitlementarray = entitlementarray[1].split("<br>")
-          # priority
-          priorityarray = read_content.split("SR_SEVERITY = ")
-          honed_priorityarray = priorityarray[1].split("<br>")
-          # queue
-          queuearray = read_content.split("LOGIN = ")
-          honed_queuearray = queuearray[1].split("<br>")
-          # account
-          accountarray = read_content.split("ACCOUNT_NAME = ")
-          honed_accountarray = accountarray[1].split("<br>")
-          # hours
-          hoursarray = read_content.split("SUPPORT_HOURS = ")
-          honed_hoursarray = hoursarray[1].split("<br>")
-          # contactvia
-          contactarray = read_content.split("X_RESPOND_VIA = ")
-          honed_contactarray = contactarray[1].split("<br>")
+        # grabbing info on whether the SR is returning or not
+        read_content = open("#{$conf_json["returning_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        unless read_content.include?("#{srnum.chomp}")
+          returnedvar = true
         end
 
-        uri = open("#{$conf_json["returning_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}) do |content|
-          # Returned boolean
-          read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-          unless read_content.include?("#{srnum.chomp}")
-            returnedvar = true
-          end
-        end
-        uri = open("#{$conf_json["ltss_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}) do |content|
-          # Compare for LTSS boolean
-          read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-          if read_content.include?("#{honed_accountarray[0]}")
-            ltssvar = true
-          end
+        # grabbing info on whether the customer has LTSS or not
+        read_content = open("#{$conf_json["ltss_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        if read_content.include?("#{sr_content["ACCOUNT_NAME"]}")
+          ltssvar = true
         end
 
         # check for Lock file
@@ -160,7 +106,7 @@ class ServiceRequestController < ApplicationController
           created_at = Time.now
 
           # Object Creation
-          ServiceRequest.create(:number => srnum, :briefdes => honed_barray[0], :longdes => honed_desarray[0], :lastact => honed_desarray[1], :lastactstamp => honed_stamparray[0], :queue => honed_queuearray[0], :priority => honed_priorityarray[0], :hours => honed_hoursarray[0], :contactvia => honed_contactarray[0], :locale => honed_localearray[0], :account => honed_accountarray[0], :returned => returnedvar, :ltss => ltssvar, :createdstamp => honed_crestamparray[0], :entitlement => honed_entitlementarray[0], :created_at => created_at)
+          ServiceRequest.create(:number => srnum, :briefdes => sr_content["SR_TITLE"], :longdes => sr_content["DESC_TEXT"], :lastact => sr_content["X_LAST_ACT_COMMENT"], :lastactstamp => sr_content["ACTL_RESP_TS"], :queue => sr_content["LOGIN"], :priority => sr_content["SR_SEVERITY"], :hours => sr_content["SUPPORT_HOURS"], :contactvia => sr_content["X_RESPOND_VIA"], :locale => sr_content["ORG"], :account => sr_content["ACCOUNT_NAME"], :returned => returnedvar, :ltss => ltssvar, :createdstamp => sr_content["CREATED"], :entitlement => sr_content["X_SUPPORT_PROG"], :created_at => created_at)
 
           # Destroy Lock file
           File.delete("app/assets/data/#{srnum.chomp}lock")
@@ -223,15 +169,11 @@ class ServiceRequestController < ApplicationController
     @service_request = ServiceRequest.find(params[:id])
 
     # Before a username update will go through it checks to make sure it hasn't already been taken by checking back with the siebel database and comparing to the rosa database.
-    honed_ownarray = []
-    uri = open("#{$conf_json["sr_info"]}#{@service_request.number}") do |content|
-      read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-      ownarray = read_content.split("LOGIN = ")
-      honed_ownarray = ownarray[1].split("<br>")
-    end
+    read_content = open("#{$conf_json["sr_info"]}#{@service_request.number}").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+    ownarray = read_content.split("LOGIN = ", 2)[1].split("<br>")
 
     # If the object's queue name and the queue name from proetus(siebel db) match it will continue
-    if ( @service_request.queue == honed_ownarray[0] )
+    if ( @service_request.queue == ownarray[0] )
       # If the SR's taken boolean is set to true it can't proceed with the update.
       if @service_request.taken
         render :action => 'SR404'

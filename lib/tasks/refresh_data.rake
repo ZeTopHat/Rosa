@@ -11,40 +11,39 @@ task :refresh_data => :environment do
   puts "Refreshing data files.."
   # Create an opensr file for each username in the app/assets/data directory. 
   Username.all.each do |user|
-    # Declare the variable outside the block to increase its scope
-    read_content = ""
+
+    puts "Updating data for #{user.name}.."
+
     # Read in content for open SRs
-    uri = open("#{conf_json["open_srs"]}#{user.name}", "r:utf-8") do |content|
-      read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-    end
+    read_content = open("#{conf_json["open_srs"]}#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+
     # Write out content to file
-    File.open("app/assets/data/opensrs_#{user.name}", 'w') do |file|
-      file.write(read_content)
-    end
+    File.open("app/assets/data/opensrs_#{user.name}", 'w').write(read_content)
+
     # Read in content for closed SRs
-    uri = open("#{conf_json["closed_srs"]}#{user.name}", "r:utf-8") do |content|
-      read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-    end
+    read_content = open("#{conf_json["closed_srs"]}#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+
     # Write out content to file
-    File.open("app/assets/data/closedsrs_#{user.name}", 'w') do |file|
-      file.write(read_content)
-    end
+    File.open("app/assets/data/closedsrs_#{user.name}", 'w').write(read_content)
+
     # Read in workforce ID
-    uri = open("#{conf_json["workforce_id"]}#{user.name}", "r:utf-8") do |id|
-      # Read in survey scores
-      read_id = id.read.scan(/[0-9]+/).pop
-      uri = open("#{conf_json["survey_scores"]}#{read_id}", "r:utf-8") do |content|
-        read_content = content.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
-      end
-    end
+    read_id = open("#{conf_json["workforce_id"]}#{user.name}", "r:utf-8").read.scan(/[0-9]+/).pop
+
+    # Read in survey scores
+    read_content = open("#{conf_json["survey_scores"]}#{read_id}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+
     # Write out survey scores to file
-    File.open("app/assets/data/surveys_#{user.name}", "w") do |file|
-      file.write(read_content)
-    end
+    File.open("app/assets/data/surveys_#{user.name}", "w").write(read_content)
+
+    puts "#{user.name} data updated."
+
   end
+
+  puts "Updating history file.."
   # Create history file for the history partial page to manipulate and render
   command = `tail -70 /var/log/qmonhistory.log | awk -F'|' '{print $10" - "$6" - "$3}' | grep -E '^[0-9]' | tac >app/assets/data/history 2>&1`
   system(command)
+  puts "History file updated."
 
   puts "done."
 end
