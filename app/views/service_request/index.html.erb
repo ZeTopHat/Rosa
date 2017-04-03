@@ -6,6 +6,14 @@
 </div>
 
 <div class="leftcontainer">
+  <!-- Checks to see if the teaminfo.txt file exists and has any content. If it does, it puts the output to the team in this div. -->
+  <% if File.file?('teaminfo.txt') && !File.zero?('teaminfo.txt') %>
+    <% teaminfo = File.read('teaminfo.txt') %>
+    ----------------- <br>
+    <%= teaminfo %>  <br>
+    ----------------- <br>
+  <% end %>
+
   <p>SRs in queue</p>
   <%= render 'list' %>
 </div>
