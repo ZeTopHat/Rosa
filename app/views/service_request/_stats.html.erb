@@ -96,29 +96,37 @@
 	  <% end %>
 	  <% amount_R2S = margin_R2S.length %>
 	  <% amount_TSES = margin_TSES.length %>
-	  <!-- We can't have a total variable because of the earlier established variables with that name for columns 6 and 7 -->
-	  <% total_R2S = array_R2S.length %>
-	  <% total_TSES = array_TSES.length %>
+	  <!-- Grabbing total values for average calculation -->
+          <% total_R2S = array_R2S.length %>
+          <% total_TSES = array_TSES.length %>
 	  <!-- Taking individual results and adding them to the team arrays for the team totals later -->
 	  <% team_R2S_size << total_R2S %>
 	  <% team_TSES_size << total_TSES %>
-	  <!-- We can't have a percentage1 or percentage7 variable because of the earlier established variables with those names for columns 6 and 7 -->
+	  <!-- Taking percentage values. If the total is 0 then this will err. Created if statements to check on that before displaying these values below. -->
 	  <% percentage_R2S = amount_R2S.to_f / total_R2S.to_f * 100 %>
 	  <% percentage_TSES = amount_TSES.to_f / total_TSES.to_f * 100 %>
 	  <!-- I'm starting this td late so that the total1array could be built and I could include it in the title -->
 <td title="Sample Size: <%= total_R2S %>" style="text-align:center">
 
+	  <% if total_R2S != 0 %>
 <!-- This is what displays in column 4 -->
-	  <%= percentage_R2S.round(1) %><small>%</small>
-	  <!-- This is for the team average calculation -->
-	  <% team_R2S << percentage_R2S %>
+	    <%= percentage_R2S.round(1) %><small>%</small>
+	    <!-- This is for the team average calculation -->
+	    <% team_R2S << percentage_R2S %>
+	  <% else %>
+	    N/A
+	  <% end %>
 </td>
 <td title="Sample Size: <%= total_TSES %>" style="text-align:center">
 
+	  <% if total_TSES != 0 %>
 <!-- This is what displays in column 5 -->
-	  <%= percentage_TSES.round(1) %><small>%</small>
-	  <!-- This is for the team average calculation -->
-	  <% team_TSES << percentage_TSES %>
+	    <%= percentage_TSES.round(1) %><small>%</small>
+	    <!-- This is for the team average calculation -->
+	    <% team_TSES << percentage_TSES %>
+	  <% else %>
+	    N/A
+	  <% end %>
 </td>
 <td title="Sample Size: <%= total_RUD %>" style="text-align:center">
 
