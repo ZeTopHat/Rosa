@@ -240,11 +240,11 @@ class ServiceRequestController < ApplicationController
         userarray << user.name
       end
       # if the mismatch is because the siebeldb entry matches a user, we simply redirect to the 404
-      if userarray.include?(honed_ownarray[0])
+      if userarray.include?(ownarray[0])
         render :action => 'SR404'
       # if the mismatch is not because the siebel db entry matches a user, we updates the queue. This is to prevent locking issues if someone changes an SRs queue through siebel. In this situation Rosa needs to update its information.
       else
-        @service_request.update_attribute(:queue, honed_ownarray[0])
+        @service_request.update_attribute(:queue, ownarray[0])
         render :action => 'SR404'
       end
     end
