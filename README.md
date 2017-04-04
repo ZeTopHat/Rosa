@@ -205,5 +205,5 @@ See also the list of [contributors](https://github.com/ZeTopHat/Rosa/contributor
 ## Acknowledgments
 
 * Hat tip to my good friend Erick Diaz for always pushing me to improve my code
-* To that God-awful tool Igor that was my drive in creating something better
+* To that God-awful tool Igor that drove me to create something better
 
