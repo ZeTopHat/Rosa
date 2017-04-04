@@ -28,6 +28,7 @@ tmp/
 *.lock
 *.psd
 *.bash*
+*.lesshst
 
 # Ignore confidential files
 config/confidential.json
