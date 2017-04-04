@@ -173,7 +173,7 @@
 </td>
 <td title="Sample Size: <%= team_TSES_size.inject(:+) %>" style="text-align:center">
 	<% if team_TSES.inject(:+).nil? || team_R2S.length.nil? %>
-	  <% team_R2S_avg = 0 %>
+	  <% team_TSES_avg = 0 %>
 	<% else %>
 	  <% team_TSES_avg = team_TSES.inject(:+) / team_TSES.length %>
 	<% end %>
