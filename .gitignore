@@ -33,6 +33,7 @@ tmp/
 config/confidential.json
 app/assets/data/
 config/secrets.yml
+app/assets/images/favicon.ico
 
 # Other home files
 .ssh/

@@ -5,7 +5,7 @@ task :refresh_data => :environment do
   require 'json'
 
   # importing json confidentials
-  conf_file = File.open("config/confidential.json", "r:utf-8").read
+  conf_file = File.open("config/confidential.json", "r:utf-8") { |f| f.read }
   conf_json = JSON.parse(conf_file)
 
   puts "Refreshing data files.."
@@ -15,25 +15,25 @@ task :refresh_data => :environment do
     puts "Updating data for #{user.name}.."
 
     # Read in content for open SRs
-    read_content = open("#{conf_json["open_srs"]}#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+    read_content = open("#{conf_json["open_srs"]}#{user.name}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
 
     # Write out content to file
-    File.open("app/assets/data/opensrs_#{user.name}", 'w').write(read_content)
+    File.open("app/assets/data/opensrs_#{user.name}", 'w') { |f| f.write(read_content) }
 
     # Read in content for closed SRs
-    read_content = open("#{conf_json["closed_srs"]}#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+    read_content = open("#{conf_json["closed_srs"]}#{user.name}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
 
     # Write out content to file
-    File.open("app/assets/data/closedsrs_#{user.name}", 'w').write(read_content)
+    File.open("app/assets/data/closedsrs_#{user.name}", 'w') { |f| f.write(read_content) }
 
     # Read in workforce ID
-    read_id = open("#{conf_json["workforce_id"]}#{user.name}", "r:utf-8").read.scan(/[0-9]+/).pop
+    read_id = open("#{conf_json["workforce_id"]}#{user.name}", "r:utf-8") { |f| f.read.scan(/[0-9]+/).pop }
 
     # Read in survey scores
-    read_content = open("#{conf_json["survey_scores"]}#{read_id}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+    read_content = open("#{conf_json["survey_scores"]}#{read_id}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
 
     # Write out survey scores to file
-    File.open("app/assets/data/surveys_#{user.name}", "w").write(read_content)
+    File.open("app/assets/data/surveys_#{user.name}", "w") { |f| f.write(read_content) }
 
     puts "#{user.name} data updated."
 

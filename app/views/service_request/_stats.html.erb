@@ -33,7 +33,7 @@
 	  <%= link_to user.name, :action => "show_usernames", :id => user.id %>
 </td>
 <td style="text-align:center">
-	  <% read_content = File.open("app/assets/data/closedsrs_#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+	  <% read_content = File.open("app/assets/data/closedsrs_#{user.name}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) } %>
 
 <!-- This is what is displaying in column 2 -->
 	  <%= read_content.scan(/#{user.name}/).length %>
@@ -64,7 +64,7 @@
 	  <% percentage_RU7D = amount_RU7D.to_f / total_RUD.to_f * 100 %>
 </td>
 <td style="text-align:center">
-	  <% read_content = File.open("app/assets/data/opensrs_#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+	  <% read_content = File.open("app/assets/data/opensrs_#{user.name}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) } %>
       
 <!-- This is what is displaying in column 3 -->
 	  <%= read_content.scan(/#{user.name}/).length %>
@@ -73,7 +73,7 @@
 	  <% team_Open << read_content.scan(/#{user.name}/).length %>
 </td>
 	  <!-- I'm delaying adding the next td, until I'm done creating some things -->
-	  <% read_content = File.open("app/assets/data/surveys_#{user.name}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+	  <% read_content = File.open("app/assets/data/surveys_#{user.name}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) } %>
 	  <!-- markers for regex -->
 	  <% marker1 = "<" %>
 	  <% marker2 = "||" %>

@@ -3,7 +3,7 @@ task :users_update => :environment do
   puts "Recreating list of Users.."
   #@usernames = Username.all
   # Read in users from file
-  usernames_content = File.open("usernames.txt", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+  usernames_content = File.open("usernames.txt", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
   # Delete all users in the database, this is so that users are added based on the order given in the usernames.txt file
   puts "Destroying all existing users in order to create order given in usernames.txt file.."
   Username.all.each do |exists|

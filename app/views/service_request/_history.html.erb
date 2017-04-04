@@ -2,7 +2,7 @@
 
 <!-- This is an array to compare the lines from the history file to all registered users and queues in the database -->
 <% usersngroups = Array.new %>
-<% read_content = File.open("app/assets/data/history", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) %>
+<% read_content = File.open("app/assets/data/history", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) } %>
 
 <!-- grabbing the users -->
 <% Username.all.each do |user| %>

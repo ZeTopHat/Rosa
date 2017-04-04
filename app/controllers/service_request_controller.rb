@@ -4,7 +4,7 @@ class ServiceRequestController < ApplicationController
   require 'json'
 
   # importing json confidentials
-  conf_file = File.open("config/confidential.json", "r:utf-8").read
+  conf_file = File.open("config/confidential.json", "r:utf-8") { |f| f.read }
   $conf_json = JSON.parse(conf_file)
 
   # Password protect certain actions
@@ -64,7 +64,7 @@ class ServiceRequestController < ApplicationController
     initqmon()
 
     # Read from file just created
-    queue_content = File.open("app/assets/data/queue", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+    queue_content = File.open("app/assets/data/queue", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
 
     trimqueue(queue_content)
 
@@ -81,18 +81,18 @@ class ServiceRequestController < ApplicationController
         ltssvar = false
         
         # pulling down SR content, organizing html content by splitting into an array twice then converting to a hash. (why couldn't it be json?? (╯°□°)╯︵ ┻━┻) 
-        read_content = open("#{$conf_json['sr_info']}#{srnum}", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        read_content = open("#{$conf_json['sr_info']}#{srnum}", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
         content_array = read_content.split("<HTML>\r\n   ", 2)[1].split("<br>")
         sr_content = Hash[content_array.map { |item| item.split(" = ", 2) }]
 
         # grabbing info on whether the SR is returning or not
-        read_content = open("#{$conf_json["returning_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        read_content = open("#{$conf_json["returning_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
         unless read_content.include?("#{srnum.chomp}")
           returnedvar = true
         end
 
         # grabbing info on whether the customer has LTSS or not
-        read_content = open("#{$conf_json["ltss_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}).read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+        read_content = open("#{$conf_json["ltss_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
         if read_content.include?("#{sr_content["ACCOUNT_NAME"]}")
           ltssvar = true
         end
@@ -169,7 +169,7 @@ class ServiceRequestController < ApplicationController
     @service_request = ServiceRequest.find(params[:id])
 
     # Before a username update will go through it checks to make sure it hasn't already been taken by checking back with the siebel database and comparing to the rosa database.
-    read_content = open("#{$conf_json["sr_info"]}#{@service_request.number}").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+    read_content = open("#{$conf_json["sr_info"]}#{@service_request.number}") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
     ownarray = read_content.split("LOGIN = ", 2)[1].split("<br>")
 
     # If the object's queue name and the queue name from proetus(siebel db) match it will continue

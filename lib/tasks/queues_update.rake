@@ -5,7 +5,7 @@ task :queues_update => :environment do
 
   puts "Creating other queues.."
   # Read in queues from file
-  otherqueues_content = File.open("otherqueues.txt", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+  otherqueues_content = File.open("otherqueues.txt", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
   # Unless the queue is an "our" queue or exists in the otherqueue file, delete the "other" queue object.
   @queues.each do |exists|
     unless exists.ours || otherqueues_content.include?("#{exists.name}")
@@ -40,7 +40,7 @@ task :queues_update => :environment do
   end
 
   puts "Creating team queues.."
-  ourqueues_content = File.open("ourqueues.txt", "r:utf-8").read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil)
+  ourqueues_content = File.open("ourqueues.txt", "r:utf-8") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
   # if the queue is an "our" queue and doesn't exist in the file, delete the "our" queue object.
   @queues.each do |exists|
     if exists.ours && !ourqueues_content.include?("#{exists.name}")
