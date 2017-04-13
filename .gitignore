@@ -29,6 +29,7 @@ tmp/
 *.psd
 *.bash*
 *.lesshst
+*.vimrc
 
 # Ignore confidential files
 config/confidential.json
