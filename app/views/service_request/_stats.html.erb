@@ -1,16 +1,17 @@
 <!-- This is the table showing Team Stats -->
-<!-- Import sorttable javascript for the table -->
-<table class="sortable" border="1">
+<!-- Import tableSort javascript for the table -->
+<table id="tablesort" border="1">
 <thead>
 <tr>
 <!-- Column Headers for the table. Hover descriptions pull from the titles. -->
-<th title="Employee Username">Name</th>
-<th title="Current total of SRs closed for the Quarter">Closed</th>
-<th title="Currently owned and open service requests">Open</th>
-<th title="Percentage of surveys marked resolved to satisfaction">R2S</th>
-<th title="Percentage of surveys with a 4 or higher on TSE satisfaction">TSES</th>
-<th title="Percentage of service requests closed within 1 day">RU1D</th>
-<th title="Percentage of service requests closed within 7 days">RU7D</th>
+<!-- "thsortable for tableSort and "sort-by" for sorting arrows -->
+<th id="name" class="thsortable sort-by" title="Employee Username">Name</th>
+<th id="closed" class="thsortable sort-by" title="Current total of SRs closed for the Quarter">Closed</th>
+<th id="open" class="thsortable sort-by" title="Currently owned and open service requests">Open</th>
+<th id="r2s" class="thsortable sort-by" title="Percentage of surveys marked resolved to satisfaction">R2S</th>
+<th id="tses" class="thsortable sort-by" title="Percentage of surveys with a 4 or higher on TSE satisfaction">TSES</th>
+<th id="ru1d" class="thsortable sort-by" title="Percentage of service requests closed within 1 day">RU1D</th>
+<th id="ru7d" class="thsortable sort-by" title="Percentage of service requests closed within 7 days">RU7D</th>
 </tr>
 </thead>
 <tbody>

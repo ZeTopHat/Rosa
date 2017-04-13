@@ -1,35 +1,51 @@
 <!-- id is used by reload.js to refresh only the index page in set intervals -->
 <body id="index">
-<!-- Divs on page are ordered and rendered below -->
-<div class="headercontainer">
-  <p>Welcome! - <%= render 'links' %></p>
+
+<!-- navigation bar -->
+<%= render 'links' %>
+
+
+<!-- Checks to see if the teaminfo.txt file exists and has any content. If it does, it puts the output to the team in this div. -->
+<% if File.file?('teaminfo.txt') && !File.zero?('teaminfo.txt') %>
+  <div class="tile is-ancestor">
+    <div class="tile is-parent is-vertical">
+      <article class="tile is-child notification is-warning has-text-centered box">
+        <% teaminfo = File.read('teaminfo.txt') %>
+        <%= teaminfo %>
+      </article>
+    </div>
+  </div>
+<% end %>
+
+<div class="columns">
+  <div id="collapsible" class="column">
+    <article class="notification is-dark box">
+      <p class="has-text-centered">SRs in queue</p>
+      <%= render 'list' %>
+    </article>
+  </div>
+</div>
+<div class="columns">
+  <div class="column">
+    <article class="notification is-dark box">
+      <p class="has-text-centered">SRs Taken</p>
+      <%= render 'taken' %>
+    </article>
+  </div>
+</div>
+<div class="columns">
+  <div class="column is-7">
+    <article class="notification is-dark box">
+      <p class="has-text-centered">Team Stats</p>
+      <%= render 'stats' %>
+    </article>
+  </div>
+  <div class="column">
+    <article class="notification is-dark box">
+      <p style="text-align:center">Recent History</p>
+      <%= render 'history' %>
+    </article>
+  </div>
 </div>
 
-<div class="leftcontainer">
-  <!-- Checks to see if the teaminfo.txt file exists and has any content. If it does, it puts the output to the team in this div. -->
-  <% if File.file?('teaminfo.txt') && !File.zero?('teaminfo.txt') %>
-    <% teaminfo = File.read('teaminfo.txt') %>
-    ----------------- <br>
-    <%= teaminfo %>  <br>
-    ----------------- <br>
-  <% end %>
-
-  <p>SRs in queue</p>
-  <%= render 'list' %>
-</div>
-
-<div class="rightcontainer">
-  <p>SRs Taken</p>
-  <%= render 'taken' %>
-</div>
-
-<div class="bottomleftcontainer">
-  <p>Team Stats</p>
-  <%= render 'stats' %>
-</div>
-
-<div class="bottomrightcontainer">
-  <p style="text-align:center">Recent History</p>
-  <%= render 'history' %>
-</div>
 </body>

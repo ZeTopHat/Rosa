@@ -1,5 +1,8 @@
 <!-- this is the Siebelmatic page -->
-<%= link_to 'Back', 'http://rosa.lab.novell.com' %>
+
+<!-- navigation bar -->
+<%= render 'service_request/links' %>
+
 <iframe src="<%= $conf_json["siebelmatic_db"] %>" width="100%" height="1000">
   <p>Uh oh! Siebelmatic isn't rendering in the iframe!</p>
 </iframe>

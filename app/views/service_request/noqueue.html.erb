@@ -1,7 +1,15 @@
 <!-- Error page that displays when someone attempts to move an SR without selecting a queue -->
-<div class="onlycontainer">
-<%= flash.now[:notice] = "You need to select a queue from the dropdown when moving an SR." %>
-<br \>
-<br \>
-<%= link_to 'Back', {:action => 'index' } %>
-</div>
+<body>
+
+<!-- navigation bar -->
+<%= render 'links' %>
+
+  <div class="tile is-ancestor">
+		<div class="tile is-parent">
+			<div class="tile is-child notification is-danger box center">
+				<%= flash.now[:notice] = "You need to select a queue from the dropdown when moving an SR." %>
+				<br \>
+			</div>
+		</div>
+	</div>
+</body>

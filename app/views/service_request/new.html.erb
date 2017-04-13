@@ -1,33 +1,48 @@
 <!-- This page is password protected -->
-<h1>Add new Service Request</h1>
+<body>
 
-<!-- Form built using rails form_tag tool -->
-<%= form_tag :action => 'create' do %>
+<!-- navigation bar -->
+<%= render 'links' %>
 
-  <!-- You can enter the SR Number -->
-  <p><label for = "sr_number">Number</label>:
-  <%= text_field 'service_requests', 'number' %></p>
+<div class="tile is-ancestor">
+	<div class="tile is-parent">
+		<div class="tile is-child is-3">
+		</div>
+		<article class="tile is-child notification is-dark box center">
+			<h1>Add new Service Request</h1>
 
-  <!-- description -->
-  <p><label for = "sr_description">Description</label>:
-  <%= text_area 'service_requests', 'briefdes' %></p>
+			<!-- Form built using rails form_tag tool -->
+			<%= form_tag :action => 'create' do %>
 
-  <!-- Set the owner of the SR from the users in the database -->
-  <p><label for = "sr_owner">Owner</label>:
-  <%= collection_select(:service_requests, :username_id, @usernames, :id, :name, prompt: true) %></p>
+  			<!-- You can enter the SR Number -->
+  			<p><label for = "sr_number">Number</label>:
+  			<%= text_field 'service_requests', 'number' %></p>
 
-  <!-- If you don't set it to take, the refresh_queue rake task will destroy the SR a few seconds later -->
-  <p><label for = "sr_taken">Taken?</label>:
-  <%= check_box 'service_requests', 'taken' %></p>
+  			<!-- description -->
+  			<p><label for = "sr_description">Description</label>:
+  			<%= text_area 'service_requests', 'briefdes' %></p>
 
-  <!-- Set whether the SR is returning -->
-  <p><label for = "sr_returned">Returning?</label>:
-  <%= check_box 'service_requests', 'returned' %></p>
+  			<!-- Set the owner of the SR from the users in the database -->
+  			<p><label for = "sr_owner">Owner</label>:
+  			<%= collection_select(:service_requests, :username_id, @usernames, :id, :name, prompt: true) %></p>
 
-  <%= submit_tag "Create" %>
+  			<!-- If you don't set it to take, the refresh_queue rake task will destroy the SR a few seconds later -->
+  			<p><label for = "sr_taken">Taken?</label>:
+  			<%= check_box 'service_requests', 'taken' %></p>
 
-<% end -%>
-<!-- End of form_tag tool -->
+  			<!-- Set whether the SR is returning -->
+  			<p><label for = "sr_returned">Returning?</label>:
+  			<%= check_box 'service_requests', 'returned' %></p>
 
-<!-- Link back to index page -->
-<%= link_to 'Back', {:action => 'index'} %>
+  			<%= submit_tag "Create" %>
+
+			<% end -%>
+			<!-- End of form_tag tool -->
+		</article>
+		<div class="tile is-child is-3">
+		</div>
+	</div>
+</div>
+
+</body>
+

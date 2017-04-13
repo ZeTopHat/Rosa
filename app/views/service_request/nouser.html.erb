@@ -1,7 +1,15 @@
 <!-- Error page that displays when someone attempts to assign an SR without selecting a user -->
-<div class="onlycontainer">
-<%= flash.now[:notice] = "You need to select a username from the dropdown when assigning." %>
-<br \>
-<br \>
-<%= link_to 'Back', {:action => 'index' } %>
-</div>
+<body>
+
+<!-- navigation bar -->
+<%= render 'links' %>
+
+  <div class="tile is-ancestor">
+		<div class="tile is-parent">
+			<div class="tile is-child notification is-danger box center">
+				<%= flash.now[:notice] = "You need to select a username from the dropdown when assigning." %>
+				<br \>
+			</div>
+		</div>
+	</div>
+</body>

@@ -10,7 +10,7 @@
 
 <!-- If the above created array is empty display this message -->
 <% if queuearray.empty? %>
-  <p>There aren't any SRs in queue.</p>
+  <br><p class="has-text-centered">There aren't any SRs in queue.</p><br>
 <!-- If it's not empty then display the SRs in queue -->
 <% else %>
   <!-- Creating arrays for sorting SRs in queue -->
@@ -49,8 +49,8 @@
     <!-- Truncating the briefdescription just in case it's super long so it doesn't make the list of SRs hard to read -->
     <%= truncate(request.briefdes, :length => 50) %>
     <!-- Make an 'Assign' link for the SR so that it can be edited with the new username -->
-    <b> <%= link_to 'Assign', {:action => "edit", :id => request.id} %></b> 
-    <b> <%= link_to 'Move', {:action => "move", :id => request.id} %></b>
+    <b> <%= link_to 'Assign', {:action => "edit", :id => request.id}, class: "button is-primary is-outlined is-small" %></b> 
+    <b> <%= link_to 'Move', {:action => "move", :id => request.id}, class: "button is-primary is-outlined is-small" %></b>
     </li>
   <% end %>
 
@@ -82,7 +82,7 @@
   <!-- Final creation of the organized list -->
   <% queues.each do |key, value| %>
     <% unless value.empty? %>
-      <u><%= key.to_s.upcase %></u>
+      <qname id="collapsible_<%= key.to_s.gsub(/\s+/, "") %>" class="collapsible" ><u><%= key.to_s.upcase %></u></qname>
       <ul>
       <% value.sort_by{|x| priorities.index x.priority}.each do |request| %>
         <% displayitem(request) %>
@@ -93,5 +93,3 @@
   <% end %>
 <% end %>
 
-<!-- Temporary abilbity to make new srs for testing. This is password protected by the controller -->
-<p><%= link_to "Add new SR", {:action => 'new' }%></p>

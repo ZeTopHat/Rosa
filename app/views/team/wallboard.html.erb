@@ -1,5 +1,8 @@
 <!-- this is the Wallboard page -->
-<%= link_to 'Back', 'http://rosa.lab.novell.com' %>
+
+<!-- navigation bar -->
+<%= render 'service_request/links' %>
+
 <iframe src="<%= $conf_json["wallboard"] %>" width="100%" height="1000">
   <p>Uh oh! Wallboard isn't rendering in the iframe!</p>
 </iframe>

@@ -1,23 +1,43 @@
-<h1>Change queue of SR# <%= @service_request.number %></h1>
+<body>
 
-<!-- ruby code to initialize the form for the specified service request. -->
-<%= form_for @service_request, :url =>{:action => "update", :id =>@service_request} do |f| %>
+<!-- navigation bar -->
+<%= render 'links' %>
 
-  <!-- Drop down -->
-  <p>Queue: <%= f.collection_select :queue, Group.all, :name, :name, {:include_blank => "--Select Queue--", :selected => Group.first} %></p>
+  <div class="tile is-ancestor">
+		<div class="tile is-parent">
+			<div class="tile is-child notification is-dark box">
+				<h1>Change queue of SR# <%= @service_request.number %></h1>
 
-  <!-- SLA email attribute -->
-  <p><label for = "sr_emailsla">Send "outside SLA" email?</label>: <%= f.check_box "emailsla" %></p>
+				<!-- ruby code to initialize the form for the specified service request. -->
+				<%= form_for @service_request, :url =>{:action => "update", :id =>@service_request}, class: "field has-addons" do |f| %>
+					Queue: 
+					<p class="control is-expanded">
+  				<!-- Drop down -->
+  				<%= f.collection_select :queue, Group.all, :name, :name, {:include_blank => "--Select Queue--", :selected => Group.first}, class: "select is-fullwidth" %>
+					</p>
+  				<!-- SLA email attribute -->
+  				<p><label for = "sr_emailsla">Send "outside SLA" email?</label>: <%= f.check_box "emailsla" %></p>
 
-  <!-- Priority email attribute -->
-  <p><label for = "sr_emailpriority">Send "low priority" email?</label>: <%= f.check_box "emailpriority" %></p>
+  				<!-- Priority email attribute -->
+  				<p><label for = "sr_emailpriority">Send "low priority" email?</label>: <%= f.check_box "emailpriority" %></p>
 
-  <!-- unassign attribute set to true and hidden so it can't be changed -->
-  <%= f.check_box "unassign", checked: true, :style => 'visibility: hidden' %>
+  				<!-- unassign attribute set to true and hidden so it can't be changed -->
+  				<%= f.check_box "unassign", checked: true, :style => 'visibility: hidden' %>
 
-  <!-- Button to submit Changes -->
-  <%= f.submit "Save changes" %>
-<% end %>
+					<p class="control">
+  				<!-- Button to submit Changes -->
+  				<%= f.submit "Save changes", class: "button is-primary" %>
+				<% end %>
+					</p>
 
-<!-- Link back to the index page -->
-<%= link_to 'Back', {:action => 'index' } %>
+				<hr />
+				<!-- Links to assign or show SR details. -->
+				<p style="text-align:center">
+					<strong><%= link_to 'Assign', {:action => "edit", :id => @service_request.id}, class: "button is-primary is-outlined" %></strong>
+					<strong><%= link_to 'Details', {:action => "show", :id => @service_request.id}, class: "button is-primary is-outlined" %></strong>
+				</p>
+
+			</div>
+		</div>
+	</div>
+</body>

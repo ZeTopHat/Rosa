@@ -1,14 +1,35 @@
-<h1>Change ownership of SR# <%= @service_request.number %></h1>
+<body>
 
-<!-- ruby code to initialize the form for the specified service request. -->
-<%= form_for @service_request, :url =>{:action => "update", :id =>@service_request} do |f| %>
+<!-- navigation bar -->
+<%= render 'links' %>
 
-<!-- Drop down -->
-<p>Owner: <%= f.collection_select :username_id, Username.all, :id, :name, {:include_blank => "--Select User--"} %></p>
+  <div class="tile is-ancestor">
+		<div class="tile is-parent">
+			<div class="tile is-child notification is-dark box">
+				<h1>Change ownership of SR# <%= @service_request.number %></h1>
 
-<!-- Button to submit Changes -->
-<%= f.submit "Save changes" %>
-<% end %>
+				<!-- ruby code to initialize the form for the specified service request. -->
+				<%= form_for @service_request, :url =>{:action => "update", :id =>@service_request}, class: "field has-addons" do |f| %>
+				Owner: 
+					<p class="control is-expanded">
+					<!-- Drop down -->
+					<%= f.collection_select :username_id, Username.all, :id, :name, {:include_blank => "--Select User--", :selected => Username.first}, class: "select is-fullwidth" %>
+					</p>
+					<p class="control">
+					<br>
+					<!-- Button to submit Changes -->
+					<%= f.submit "Save changes", class: "button is-primary" %>
+				<% end %>
+					</p>
 
-<!-- Link back to the index page -->
-<%= link_to 'Back', {:action => 'index' } %>
+					<hr />
+					<!-- Added links to move or show the SR details. -->
+					<p style="text-align:center">
+						<strong><%= link_to 'Details', {:action => "show", :id => @service_request.id}, class: "button is-primary is-outlined" %></strong>
+						<strong><%= link_to 'Move', {:action => "move", :id => @service_request.id}, class: "button is-primary is-outlined" %></strong>
+					</p>
+			</div>
+		</div>
+	</div>
+
+</body>

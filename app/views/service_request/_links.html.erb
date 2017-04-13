@@ -1,6 +1,41 @@
-<!-- partial page for rendering links on the index page -->
-
-<%= link_to 'On Call', '/team/oncall' %>
-<%= link_to 'Siebelmatic', '/team/siebelmatic' %>
-<%= link_to 'SLA', '/team/sla' %>
-<%= link_to 'Wallboard', '/team/wallboard' %>
+<!-- partial page for rendering the navigation bar -->
+<nav class="nav has-shadow is-dark">
+  <div class="nav-left">
+    <p class="nav-item">
+      <%= image_tag 'logo.png' %>
+    </p>
+  </div>
+  <div class="nav-right nav-menu">
+    <div class="nav-item">
+      <div class="tabs">
+        <ul>
+          <% if current_page?('/') %>
+            <li class="is-active"><%= link_to 'Home', '/' %></li>
+          <% else %>
+            <li><%= link_to 'Home', '/' %></li>
+          <% end %>
+          <% if current_page?('/team/oncall') %>
+            <li class="is-active"><%= link_to 'On Call', '/team/oncall' %></li>
+          <% else %>
+            <li><%= link_to 'On Call', '/team/oncall' %></li>
+          <% end %>
+          <% if current_page?('/team/siebelmatic') %>
+            <li class="is-active"><%= link_to 'Siebelmatic', '/team/siebelmatic' %></li>
+          <% else %>
+            <li><%= link_to 'Siebelmatic', '/team/siebelmatic' %></li>
+          <% end %>
+          <% if current_page?('/team/sla') %>
+            <li class="is-active"><%= link_to 'SLA', '/team/sla' %></li>
+          <% else %>
+            <li><%= link_to 'SLA', '/team/sla' %></li>
+          <% end %>
+          <% if current_page?('/team/wallboard') %>
+            <li class="is-active"><%= link_to 'Wallboard', '/team/wallboard' %></li>
+          <% else %>
+            <li><%= link_to 'Wallboard', '/team/wallboard' %></li>
+          <% end %>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>

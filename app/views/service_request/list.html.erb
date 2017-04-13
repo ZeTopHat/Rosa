@@ -1,32 +1,48 @@
 <!-- Currently only available by typing in fdqn/servic_requests/list to url bar. This is a temporary admin tool for more easily managing SR objects. Delete is an option on this page.-->
+<body>
 
-<!-- list all users with links to display their show pages -->
-<ul id = "usernames">
-  <% Username.all.each do |user| %>
-    <li><%= link_to user.name, :action => "show_usernames", :id => user.id %></li>
-  <% end %>
-</ul>
+<!-- navigation bar -->
+<%= render 'links' %>
 
-<!-- similar to _list partial page, it will say no srs if no srs. However, this will list all SR objects, not just ones that are not owned or not unassigned.-->
-<% if @service_requests.blank? %>
-<p>There aren't any SRs in the database.</p>
-<% else %>
-<p>These are the SRs in the database:</p>
+<div class="columns">
+	<div class="column">
+	</div>
+	<div class="column notification is-dark">
+		<!-- list all users with links to display their show pages -->
+		<p>All users in the database: </p>
+		<ul id = "usernames">
+  		<% Username.all.each do |user| %>
+    		<li><%= link_to user.name, :action => "show_usernames", :id => user.id %></li>
+  		<% end %>
+		</ul>
+	</div>
 
-<ul id = "service_requests">
-  <% @service_requests.each do |request| %>
-    <li>
-      <!-- Show details of number -->
-      <%= link_to request.number, {:action => 'show', :id => request.id} -%>
-      <!-- Edit the SR ( currently only option is to change owner since this is the same page as the page used to assign on the main interface)-->
-      <b> <%= link_to 'Edit', {:action => "edit", :id => request.id} %></b>
-      <!-- Destroy the object. The delete option is password protected however, since this is user accessible. (currently working in it asking for confirmation.) -->
-      <b> <%= link_to "Delete", :id => request.id, :data => {:confirm => 'Are you sure?'}, :action => :delete %></b>
-    </li>
-  <% end %>
-</ul>
+	<!-- similar to _list partial page, it will say no srs if no srs. However, this will list all SR objects, not just ones that are not owned or not unassigned.-->
+	<div class="column notification is-dark">
+		<% if @service_requests.blank? %>
+			<p>There aren't any SRs in the database.</p>
+		<% else %>
+			<p>These are the SRs in the database:</p>
 
-<% end %>
+			<ul id = "service_requests">
+  			<% @service_requests.each do |request| %>
+    			<li>
+      			<!-- Show details of number -->
+      			<%= link_to request.number, {:action => 'show', :id => request.id} -%>
+      			<!-- Edit the SR ( currently only option is to change owner since this is the same page as the page used to assign on the main interface)-->
+      			<b> <%= link_to 'Edit', {:action => "edit", :id => request.id} %></b>
+      			<!-- Destroy the object. The delete option is password protected however, since this is user accessible. (currently working in it asking for confirmation.) -->
+      			<b> <%= link_to "Delete", :id => request.id, :data => {:confirm => 'Are you sure?'}, :action => :delete %></b>
+    			</li>
+  			<% end %>
+			</ul>
+		<% end %>
+		
+		<!-- Ability to make an SR object for testing. (doesn't affect siebel, only rosa). This is password protected by the controller. -->
+		<p><%= link_to "Add new SR", {:action => 'new' }%></p>
+	</div>
+	<div class="column">
+	</div>
+</div>
 
-<!-- Ability to make an SR object for testing. (doesn't affect siebel, only rosa). This is password protected by the controller. -->
-<p><%= link_to "Add new SR", {:action => 'new' }%></p>
+</body>

@@ -1,56 +1,70 @@
 <!-- Page to show Details of the Service Request Object -->
-<h1><%= @service_request.number %></h1>
+<body>
 
-<p>
-  <!-- If the returned boolean validates as true include that detail in the output -->
-  <% if @service_request.returned %>
-    *Returning SR*<br />
-    <br>
-  <% end %>
-  <!-- If the ltss boolean validates as true include that detail in the output -->
-  <% if @service_request.ltss %>
-    *Has LTSS*<br />
-    <br>
-  <% end %>
+<!-- navigation bar -->
+<%= render 'links' %>
 
-  <!-- stamps are pulled in different timezone. The following is to adjust the created stamp to mtn time -->
-  <% origcstamp = @service_request.createdstamp %>
-  <% format = "%m/%d/%Y %H:%M:%S %P" %>
-  <!-- 6 hours back from pulled timestamp -->
-  <% mtncstamp = DateTime.strptime(origcstamp, format) - Rational(6, 24) %>
+<div class="tile is-ancestor">
+	<div class="tile is-parent">
+		<div class="tile is-child is-1">
+		</div>
+		<article class="tile is-child notification is-dark box center">
+			<h1><%= @service_request.number %></h1>
 
-  <!-- List of Details each pulled from an attribute of the object. -->
-  <strong>Created Stamp: </strong> <%= mtncstamp.strftime("%m/%d/%Y %I:%M:%S %p") %><br />
-  <strong>Brief Description: </strong> <%= @service_request.briefdes %><br />
-  <% if @service_request.username.blank? %>
-    <strong>Owner: </strong>None<br />
-  <% else %>
-    <strong>Owner: </strong> <%= link_to @service_request.username.name, :action => 'show_usernames', :id => @service_request.username.id %><br />
-  <% end %>
-  <strong>Locale: </strong> <%= @service_request.locale %><br />
-  <strong>Priority: </strong> <%= @service_request.priority %><br />
-  <strong>Hours: </strong> <%= @service_request.hours %><br />
-  <strong>Contact Via: </strong> <%= @service_request.contactvia %><br />
-  <strong>Queue: </strong> <%= @service_request.queue %><br />
-  <strong>Account: </strong> <%= @service_request.account %><br />
-  <strong>Entitlement: </strong> <%= @service_request.entitlement %><br />
-  <!-- these last two have text boxes but are set so that they are read only -->
-  <strong>Long Description: </strong><br /> <%= text_area(:service_request, :longdes, size: "80x12", :readonly => true) %><br />
-  <!-- stamps are pulled in different timezone. The following is to adjust the last act stamp to mtn time -->
-  <% origlstamp = @service_request.lastactstamp %>
-  <% format = "%m/%d/%Y %H:%M:%S %P" %>
-  <!-- 6 hours back from pulled timestamp -->
-  <% mtnlstamp = DateTime.strptime(origlstamp, format) - Rational(6, 24) %>
-  <strong>Last Act: </strong> <%= mtnlstamp.strftime("%m/%d/%Y %I:%M:%S %p") %><br /><%= text_area(:service_request, :lastact, size: "80x12", :readonly => true) %><br />
-</p>
+			<p>
+  		<!-- If the returned boolean validates as true include that detail in the output -->
+  		<% if @service_request.returned %>
+    		*Returning SR*<br />
+    		<br>
+  		<% end %>
+  		<!-- If the ltss boolean validates as true include that detail in the output -->
+  		<% if @service_request.ltss %>
+    		*Has LTSS*<br />
+    		<br>
+  		<% end %>
 
-<hr />
+  		<!-- stamps are pulled in different timezone. The following is to adjust the created stamp to mtn time -->
+  		<% origcstamp = @service_request.createdstamp %>
+  		<% format = "%m/%d/%Y %H:%M:%S %P" %>
+  		<!-- 6 hours back from pulled timestamp -->
+  		<% mtncstamp = DateTime.strptime(origcstamp, format) - Rational(6, 24) %>
 
-<!-- Link back to the index page -->
-<%= link_to 'Back', {:action => 'index'} %>
+  		<!-- List of Details each pulled from an attribute of the object. -->
+  		<strong>Created Stamp: </strong> <%= mtncstamp.strftime("%m/%d/%Y %I:%M:%S %p") %><br />
+  		<strong>Brief Description: </strong> <%= @service_request.briefdes %><br />
+  		<% if @service_request.username.blank? %>
+    		<strong>Owner: </strong>None<br />
+  		<% else %>
+    		<strong>Owner: </strong> <%= link_to @service_request.username.name, :action => 'show_usernames', :id => @service_request.username.id %><br />
+  		<% end %>
+  		<strong>Locale: </strong> <%= @service_request.locale %><br />
+  		<strong>Priority: </strong> <%= @service_request.priority %><br />
+  		<strong>Hours: </strong> <%= @service_request.hours %><br />
+  		<strong>Contact Via: </strong> <%= @service_request.contactvia %><br />
+  		<strong>Queue: </strong> <%= @service_request.queue %><br />
+  		<strong>Account: </strong> <%= @service_request.account %><br />
+  		<strong>Entitlement: </strong> <%= @service_request.entitlement %><br />
+  		<!-- these last two have text boxes but are set so that they are read only -->
+  		<strong>Long Description: </strong><br /> <%= text_area(:service_request, :longdes, size: "80x12", :readonly => true) %><br />
+  		<!-- stamps are pulled in different timezone. The following is to adjust the last act stamp to mtn time -->
+  		<% origlstamp = @service_request.lastactstamp %>
+  		<% format = "%m/%d/%Y %H:%M:%S %P" %>
+  		<!-- 6 hours back from pulled timestamp -->
+  		<% mtnlstamp = DateTime.strptime(origlstamp, format) - Rational(6, 24) %>
+  		<strong>Last Act: </strong> <%= mtnlstamp.strftime("%m/%d/%Y %I:%M:%S %p") %><br /><%= text_area(:service_request, :lastact, size: "80x12", :readonly => true) %><br />
+			</p>
 
-<!-- Added links to assign or move the SR from the details. They are on the bottom far right since these are less commonly used and want them away from the back button -->
-<p style="text-align:right">
-<%= link_to 'Assign', {:action => "edit", :id => @service_request.id} %>  
-<%= link_to 'Move', {:action => "move", :id => @service_request.id} %>
-</p>
+			<hr />
+
+			<!-- Added links to assign or move the SR from the details. -->
+			<p style="text-align:center">
+			<strong><%= link_to 'Assign', {:action => "edit", :id => @service_request.id}, class: "button is-primary is-outlined" %></strong>
+			<strong><%= link_to 'Move', {:action => "move", :id => @service_request.id}, class: "button is-primary is-outlined" %></strong>
+			</p>
+		</article>
+		<div class="tile is-child is-1">
+		</div>
+	</div>
+</div>
+
+</body>
