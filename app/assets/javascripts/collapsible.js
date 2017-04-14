@@ -20,49 +20,49 @@ function collapsible(idHash) {
 
 // Jquery to impliment collapse on proper click and with cookie
 document.addEventListener("page:change", function() {
-    if($('#collapsible').length){
+	if($('#collapsible').length){
+		idHash = {};
+		ids = [];
+		$(".collapsible").each(function() {
+			id = $(this).attr('id');
+			ids.push(id);
+		});
+		for (var i = 0; i < ids.length; i++) {
+			var collapsibleIdCookie = readCookie("collapsibleId" + ids[i]);
+			var expansionCookie = readCookie("expansion" + ids[i]);
+			// convert cookie text back to boolean
+			if (expansionCookie == "false"){
+				expansion = false;
+			} else {
+				expansion = true;
+			}
+			if (collapsibleIdCookie){
+				idHash[collapsibleIdCookie] = expansion;
+			}
+		}
+		// make sure cookie exists then run through function with cookies
+		if (idHash){
+			collapsible(idHash);
+		}
+
+		$(".collapsible").click( function(){
 			idHash = {};
 			ids = [];
-			$(".collapsible").each(function() {
-				id = $(this).attr('id');
-				ids.push(id);
-			});
-			for (var i = 0; i < ids.length; i++) {
-				var collapsibleIdCookie = readCookie("collapsibleId" + ids[i]);
-				var expansionCookie = readCookie("expansion" + ids[i]);
-				// convert cookie text back to boolean
-				if (expansionCookie == "false"){
-      		expansion = false;
-    		} else {
-      		expansion = true;
-    		}
-				if (collapsibleIdCookie){
-					idHash[collapsibleIdCookie] = expansion;
-				}
+			id = $(this).attr('id');
+			ids.push(id);
+			// setting cookies and toggling expansion
+			document.cookie = "collapsibleId" + id + "=" + id + ";";
+			var expansionCookie = readCookie("expansion" + id);
+			if (expansionCookie == "false"){
+				expansion = false;
+			} else {
+				expansion = true;
 			}
-			// make sure cookie exists then run through function with cookies
-			if (idHash){
-				collapsible(idHash);
-			}
-
-    	$(".collapsible").click( function(){
-				idHash = {};
-				ids = [];
-      	id = $(this).attr('id');
-				ids.push(id);
-    		// setting cookies and toggling expansion
-      	document.cookie = "collapsibleId" + id + "=" + id + ";";
-				var expansionCookie = readCookie("expansion" + id);
-				if (expansionCookie == "false"){
-					expansion = false;
-				} else {
-					expansion = true;
-				}
 				expansion = !expansion;
 				document.cookie = "expansion" + id + "=" + expansion + ";";
 				idHash[id] = expansion;
 				collapsible(idHash);
-    	});
-    }
+		});
+	}
 });
 
