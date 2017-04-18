@@ -25,6 +25,9 @@
 <!-- function for displaying each SR as an item -->
   <% def displayitem(request) %>
     <li>
+    <!-- Make an 'Assign' link for the SR so that it can be edited with the new username -->
+    <b> <%= link_to 'Assign', {:action => "edit", :id => request.id}, class: "button is-primary is-outlined is-small" %></b> 
+    <b> <%= link_to 'Move', {:action => "move", :id => request.id}, class: "button is-primary is-outlined is-small" %></b>
     <!-- Minutes passed since the object was created in Rosa -->
     <% timeW = request.created_at.to_i / 60 %>
     <% timeN = Time.now.to_i / 60 %>
@@ -48,9 +51,6 @@
     -
     <!-- Truncating the briefdescription just in case it's super long so it doesn't make the list of SRs hard to read -->
     <%= truncate(request.briefdes, :length => 50) %>
-    <!-- Make an 'Assign' link for the SR so that it can be edited with the new username -->
-    <b> <%= link_to 'Assign', {:action => "edit", :id => request.id}, class: "button is-primary is-outlined is-small" %></b> 
-    <b> <%= link_to 'Move', {:action => "move", :id => request.id}, class: "button is-primary is-outlined is-small" %></b>
     </li>
   <% end %>
 
