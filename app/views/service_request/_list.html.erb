@@ -24,34 +24,31 @@
 
 <!-- function for displaying each SR as an item -->
   <% def displayitem(request) %>
-    <li>
     <!-- Make an 'Assign' link for the SR so that it can be edited with the new username -->
-    <b> <%= link_to 'Assign', {:action => "edit", :id => request.id}, class: "button is-primary is-outlined is-small" %></b> 
-    <b> <%= link_to 'Move', {:action => "move", :id => request.id}, class: "button is-primary is-outlined is-small" %></b>
+    <td class="tdtable" width="5%"><b> <%= link_to 'Assign', {:action => "edit", :id => request.id}, class: "button is-primary is-outlined is-small" %></b> </td>
+    <td class="tdtable" width="5%"><b> <%= link_to 'Move', {:action => "move", :id => request.id}, class: "button is-primary is-outlined is-small" %></b> </td>
     <!-- Minutes passed since the object was created in Rosa -->
     <% timeW = request.created_at.to_i / 60 %>
     <% timeN = Time.now.to_i / 60 %>
-    
-    [<%= timeN - timeW %> min]
-
+    <td class="tdtable" style="text-align: right;" width="7%">[<%= timeN - timeW %> min]</td>
     <!-- Test boolean returned to see if it is a returning service request -->
-    <% if request.returned %>
-    Returning -
-    <% end %>
+    <td class="tdtable centered" width="6%">
+		<% if request.returned %>
+    Returning
+		<% else %>
+		New
+    <% end %></td>
     <!-- This will show the SR number but also make it a link to the details of that SR using the 'show' action -->
-    <%= link_to request.number, {:action => 'show', :id => request.id} -%>
-    -
-    <%= request.locale %>
-    -
-    <%= request.hours %>
-    -
-    <%= request.priority %>
-    -
-    <%= request.contactvia %>
-    -
+    <td class="tdtable centered" width="8%"><%= link_to request.number, {:action => 'show', :id => request.id} -%></td>
+    <td class="tdtable centered" width="5%"><%= request.hours %></td>
+    <td class="tdtable centered" width="5%"><%= request.priority %></td>
+		<% if request.contactvia.empty? %>
+			<td class="tdtable centered" width="5%">-</td>
+		<% else %>
+    	<td class="tdtable centered" width="5%"><%= request.contactvia %></td>
+		<% end %>
     <!-- Truncating the briefdescription just in case it's super long so it doesn't make the list of SRs hard to read -->
-    <%= truncate(request.briefdes, :length => 50) %>
-    </li>
+    <td class="tdtable" width="53%"><%= truncate(request.briefdes, :length => 70) %></td>
   <% end %>
 
   <!-- block to sort SRs into their respective arrays --> 
@@ -83,11 +80,11 @@
   <% queues.each do |key, value| %>
     <% unless value.empty? %>
       <qname id="collapsible_<%= key.to_s.gsub(/\s+/, "") %>" class="collapsible" ><u><%= key.to_s.upcase %></u></qname>
-      <ul>
+      <table class="tabletable">
       <% value.sort_by{|x| priorities.index x.priority}.each do |request| %>
-        <% displayitem(request) %>
+        <tr class="trtable"><% displayitem(request) %></tr>
       <% end %>
-      </ul>
+      </table>
       <br>
     <% end %>
   <% end %>

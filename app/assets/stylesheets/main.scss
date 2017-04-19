@@ -20,6 +20,18 @@ table, td, th {
   color: whitesmoke;
 }
 
+// other table behaviours
+.tabletable, .tdtable, .thtable {
+	border: 0;
+	margin: auto;
+	padding: 2px;
+}
+
+// centered
+.centered {
+	text-align: center;
+}
+
 // strong text color whitesmoke
 strong {
 color: whitesmoke;

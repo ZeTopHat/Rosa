@@ -5,7 +5,7 @@ function collapsible(idHash) {
 		for (var i = 0; i < elements.length; i++) {
 			var child = elements[i];
 			if(value){
-				child.style.display = 'inherit';
+				child.style.display = '';
 			} else {
 				child.style.display = 'none';
 			}
