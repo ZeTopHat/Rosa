@@ -90,7 +90,18 @@ class ServiceRequestController < ApplicationController
 				end
 
 				# grabbing info on whether the customer has LTSS or not
-				read_content = open("#{$conf_json["ltss_info"]}", "r:utf-8", {ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
+				# The LTSS url, is unfortunately, not very stable. Due to this I've added a timeout and error handling for that timeout so that SRs are still created.
+				begin
+					require 'timeout'
+					timeout(5){
+						read_content = open("#{$conf_json["ltss_info"]}", "r:utf-8", {read_timeout: 5, ssl_verify_mode: OpenSSL::SSL::VERIFY_NONE}) { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
+					}
+				rescue Timeout::Error
+					if read_content.nil?
+						read_content = ""
+					end
+				end
+
 				if read_content.include?("#{sr_content["ACCOUNT_NAME"]}")
 					ltssvar = true
 				end
