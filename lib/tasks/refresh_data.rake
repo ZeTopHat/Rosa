@@ -41,7 +41,7 @@ task :refresh_data => :environment do
 
   puts "Updating history file.."
   # Create history file for the history partial page to manipulate and render
-  command = `tail -70 /var/log/qmonhistory.log | awk -F'|' '{print $10" - "$6" - "$3}' | grep -E '^[0-9]' | tac >app/assets/data/history 2>&1`
+  command = `tail -70 /var/log/qmonhistory.log | awk -F'|' '{print $10" - "$6" - "$3" - "$NF}' | grep -E '^[0-9]' | tac >app/assets/data/history 2>&1`
   system(command)
   puts "History file updated."
 

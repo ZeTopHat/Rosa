@@ -7,6 +7,7 @@
 		<div class="tile is-parent">
 			<div class="tile is-child notification is-dark box">
 				<h1>Change queue of SR# <%= @service_request.number %></h1>
+				<p class="has-text-centered"><%= @service_request.locale %> <%= @service_request.priority %> <%= @service_request.hours %></p>
 
 				<!-- ruby code to initialize the form for the specified service request. -->
 				<%= form_for @service_request, :url =>{:action => "update", :id =>@service_request}, class: "field has-addons" do |f| %>

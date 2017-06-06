@@ -18,6 +18,6 @@
   <% words = line.split(" ") %>
   <!-- only print the line if it has a match -->
   <% unless (usersngroups & words).empty? %>
-    <%= line %><br>
+    <small><%= line %></small><br>
   <% end %>
 <% end %>
