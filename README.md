@@ -100,6 +100,14 @@ WantedBy=multi-user.target
 
 Make sure that when you extracted the Rosa files that they are owned by the user youve configured nginx to use so that it can access properly.
 
+For Ruby on Rails in production you want to have the secret used for verifying signed cookies set in a different location than the file itself. You'll see in the config/secrets.yml that it points to an environment variable. You can place it into the bash environment variable:
+
+```
+# Ruby Production Environment Secret
+export SECRET_KEY_BASE=<key>
+export RAILS_ENV=production
+```
+
 Next, youll need access to the internal qmon tool and make sure that it is installed properly on the box and enabled. The following command should bring back results.
 
 ```
