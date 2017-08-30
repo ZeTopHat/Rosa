@@ -123,6 +123,8 @@ rosa@rni:~> cat /etc/logrotate.d/rails_rosa
 }
 ```
 
+* Note: You'll want to make a logrotate file for the nginx log as well.
+
 Almost done! Crons will have to be setup to run as the user who owns the rosa files.
 
 ```
@@ -140,7 +142,7 @@ rosa@rni:~> crontab -l
 * The third cron refreshes important information on the SRs in the database that might have been changed in siebel directly since the creation of the SR in the Maria database.
 * The fourth cron clears the SRs Taken table once a night at 11:58 pm.
 
-Going into production the assets pipeline has to be precompiled before starting anything. Stop nginx if you have it running.
+Going into production the assets pipeline has to be precompiled before starting anything. Stop nginx if you have it running. This will be necessary any time you make an asset change. e.g. css, javascript, images, etc.
 
 ```
 sudo systemctl stop nginx
