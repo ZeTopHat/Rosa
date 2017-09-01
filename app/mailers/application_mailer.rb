@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: "rni.suse@gmail.com"
+  default from: "#{$conf_json['mailer_username']}"
   layout 'mailer'
 end

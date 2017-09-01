@@ -1,5 +1,5 @@
 class AutomatedEmail < ApplicationMailer
-  default from: 'rni.suse@gmail.com'
+  default from: "#{$conf_json['mailer_username']}"
 
   def outside_sla(sr)
     @service_request = sr

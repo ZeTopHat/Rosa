@@ -1,3 +1,7 @@
+# importing json confidentials
+conf_file = File.open("config/confidential.json", "r:utf-8") { |f| f.read }
+conf_json = JSON.parse(conf_file)
+
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
@@ -47,6 +51,7 @@ Rails.application.configure do
   # Use the lowest log level to ensure availability of diagnostic information
   # when problems arise.
   config.log_level = :info
+  #config.log_level = :debug
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -80,10 +85,10 @@ Rails.application.configure do
   # Gmail smtp configuration
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    :address => "smtp.gmail.com",
+    :address => "#{conf_json['mailer_address']}",
     :port => 587,
-    :user_name => "rni.suse@gmail.com",
-    :password => "Linux007",
+    :user_name => "#{conf_json['mailer_username']}",
+    :password => "#{conf_json['mailer_password']}",
     :authentication => :plain,
     :enable_starttls_auto => true
   }
