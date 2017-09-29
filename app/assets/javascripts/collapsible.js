@@ -1,7 +1,7 @@
 // Function to allow for collapsible content
 function collapsible(idHash) {
-	$.each(idHash, (key, value) => {
-		let elements = $("#key").next().children();
+    $.each(idHash, (key, value) => {
+        let elements = $("#key").next().children();
 
         // Use 'map' to iterate over elements instead of for-loop and use ternaries to assign conditional values
         elements.map((element) => {
@@ -9,7 +9,7 @@ function collapsible(idHash) {
         });
 
         value ? $("#key").find('sup').replaceWith('') : $("#key").append($('<sup class="supersup">collapses</sup>'));
-	});
+    });
 }
 
 // Parses some value; if its "false" (string) or false (boolean) returns false
@@ -19,15 +19,15 @@ function parseBool(stringVal) {
 
 // Jquery to impliment collapse on proper click and with cookie
 document.addEventListener("page:change", function() {
-	if($('#collapsible').length){
-		let idHash = {};
-		let ids = [];
+    if($('#collapsible').length){
+        let idHash = {};
+        let ids = [];
         let id;
 
-		$(".collapsible").each(function() {
-			id = $(this).attr('id');
-			ids.push(id);
-		});
+        $(".collapsible").each(function() {
+            id = $(this).attr('id');
+            ids.push(id);
+        });
 
         ids.map((singleId) => {
             let collapsibleIdCookie;
@@ -37,20 +37,20 @@ document.addEventListener("page:change", function() {
         
         if (idHash) collapsible(idHash);
 
-		$(".collapsible").click( function(){
-			idHash = {};
-			ids = [];
-			id = $(this).attr('id');
-			ids.push(id);
+        $(".collapsible").click( function(){
+            idHash = {};
+            ids = [];
+            id = $(this).attr('id');
+            ids.push(id);
 
-			// setting cookies and toggling expansion
-			document.cookie = `collapsibleId${id}=${id};`;
-			expansion != parseBool(readCookie(`expansion ${id}`));
+            // setting cookies and toggling expansion
+            document.cookie = `collapsibleId${id}=${id};`;
+            expansion != parseBool(readCookie(`expansion ${id}`));
 
-			document.cookie = `expansion${id}=${expansion};`;
-			idHash[id] = expansion;
-			collapsible(idHash);
-		});
-	}
+            document.cookie = `expansion${id}=${expansion};`;
+            idHash[id] = expansion;
+            collapsible(idHash);
+        });
+    }
 });
 
