@@ -1,14 +1,14 @@
 // Function to allow for collapsible content
 function collapsible(idHash) {
     $.each(idHash, (key, value) => {
-        let elements = $("#key").next().children();
+        let elements = $(`#${key}`).next().children();
 
         // Use 'map' to iterate over elements instead of for-loop and use ternaries to assign conditional values
         elements.map((element) => {
             value ? element.style.display = '' : element.style.display = 'none'
         });
 
-        value ? $("#key").find('sup').replaceWith('') : $("#key").append($('<sup class="supersup">collapses</sup>'));
+        value ? $(`#${key}`).find('sup').replaceWith('') : $(`#${key}`).append($('<sup class="supersup">collapses</sup>'));
     });
 }
 
