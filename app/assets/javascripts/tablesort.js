@@ -5,52 +5,35 @@ on columns between ascending/descending order*/
 let pcolumn;
 let toggleOn;
 
-function compare(a, b) {
-    if (a.text < b.text)  return -1;
-    if (a.text > b.text) {
-        a.node.parentNode.insertBefore(b.node, a.node);
-        return 1;
-    }
-    return 0;
-}
-
-
 function parseBool(stringVal) {
-    return !(stringVal === false || stringVal === "false")
+    return !(stringVal === false || stringVal === "false");
 }
 
 function tableSort(column) {
     const rows = Array.from($("#tablesort").rows);
     const shortenedRows = rows.slice(1, rows.length - 1);
-
-    shortenedRows.map((row) => {
-        return {
-         "node": row.cells[column],
-         "text": row.cells[column].textContent
-        }   
-    }).sort(compare)
+    
+    const sortedText = shortenedRows.map((row) => {
+         return row.cells[column].textContent;
+    }).sort();
+    
+    shortenedRows.map((row, index) => {
+        row.cells[column].textContent = sortedText[index];
+    });
 
 	/* if the same column was clicked twice use toggling
 	to go back and forth between ascending and descending
 	order instead of sorting over and over */
-	if (pcolumn == column && !toggleOn){
-		// Set the pcolumn cookie
+	if ((pcolumn == column) && !toggleOn) {
  		document.cookie = `pcolumn=${pcolumn}`;
-        $("#tablesort")
- 		// reverse the order of the sorting
- 		listrows = table.getElementsByTagName("TR");
-		pnode = listrows[1].parentNode;
-		rows = $.makeArray(listrows).reverse();
-		for (i = 1; i < (listrows.length - 1); i++) {
-			pnode.removeChild(listrows[i]);
-		}
-		for (i = 1; i < (rows.length - 1); i++) {
-			pnode.appendChild(rows[i]);
-		}
+
+        shortenedRows.map((row, index) => {
+            row.cells[column].textContent = sortedText.reverse()[index];
+        });
 	}
 }
 
-function readCookie(name){;
+function readCookie(name) {
 	const cookieArray = document.cookie.split(';');
     
     return cookieArray.reduce((retVal, cookie) => {
