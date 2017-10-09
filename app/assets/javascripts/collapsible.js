@@ -45,7 +45,7 @@ document.addEventListener("page:change", function() {
 
             // setting cookies and toggling expansion
             document.cookie = `collapsibleId${id}=${id};`;
-            expansion != parseBool(readCookie(`expansion ${id}`));
+            expansion != parseBool(readCookie(`expansion${id}`));
 
             document.cookie = `expansion${id}=${expansion};`;
             idHash[id] = expansion;
