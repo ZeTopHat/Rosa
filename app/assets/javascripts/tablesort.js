@@ -11,7 +11,7 @@ function parseBool(stringVal) {
 
 function tableSort(column) {
     const rows = Array.from($("#tablesort").rows);
-    const shortenedRows = rows.slice(1, rows.length - 1);
+    const shortenedRows = rows.slice(1, rows.length - 2);
     
     const sortedText = shortenedRows.map((row) => {
          return row.cells[column].textContent;
