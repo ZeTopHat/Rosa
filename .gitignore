@@ -44,5 +44,9 @@ app/assets/images/favicon.ico
 .local/
 mbox
 .viminfo
+<<<<<<< HEAD
 .lesshst
 .Xauthority
+=======
+.DS_Store
+>>>>>>> 85735f094ac75ad48f42d186184875e7fa9ca854

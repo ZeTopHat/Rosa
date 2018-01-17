@@ -209,6 +209,7 @@ Please read [CONTRIBUTING.md](https://github.com/ZeTopHat/Rosa/blob/master/CONTR
 ## Author
 
 * **Colin Hamilton** - *Initial work* - [ZeTopHat](https://github.com/ZeTopHat)
+* **Erick Diaz** - *Refactoring Guru* - [Bearlock](https://github.com/Bearlock)
 
 See also the list of [contributors](https://github.com/ZeTopHat/Rosa/contributors) who participated in this project.
 
