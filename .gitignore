@@ -44,3 +44,5 @@ app/assets/images/favicon.ico
 .local/
 mbox
 .viminfo
+.lesshst
+.Xauthority
