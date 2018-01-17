@@ -1,3 +1,5 @@
 [user]
 	email = colinhamilton579@gmail.com
 	name = ZeTopHat
+[push]
+	default = simple
