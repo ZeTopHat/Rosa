@@ -12,6 +12,7 @@ Make sure you are fully patched on a SLES 12 SP1. You will also need the SLE-Mod
 
 Access to internal tools will be a necessity: siebel, proetus, qmon
 
+Use git clone to copy down these files to your chosen directory for these website files and move into that directory.
 ```
 rosa@rni:~> zypper ls
 # | Alias                                                        | Name                                                         | Enabled | GPG Check | Refresh | Type  
@@ -30,13 +31,7 @@ Start by installing the following packages.
 sudo zypper install ruby-devel ruby2.1-rubygem-rails-4_2 ruby2.1-rubygem-bundler gcc make zlib zlib-devel sqlite3 sqlite3-devel
 ```
 
-Next install rails through gem.
-
-```
-sudo gem install rails
-```
-
-Then run through a bundle install.
+Next run through a bundle install which should give you rails and all other needed gems for this project. (This needs to be done in the same directory as the website files so that it can pull from the Gemfile.)
 
 ```
 bundle install
