@@ -5,19 +5,6 @@ on columns between ascending/descending order*/
 let pcolumn;
 let toggleOn;
 
-// Shimming some es6 functions
-String.prototype.contains = String.prototype.contains || function(str) {
-    return this.indexOf(str) >= 0;
-}
-
-String.prototype.startsWith = String.prototype.startsWith || function(prefix) {
-    return this.indexOf(prefix) === 0;
-}
-
-String.prototype.endsWith = String.prototype.endsWith || function(suffix) {
-    return this.indexOf(suffix, this.length - suffix.length) >= 0;
-}
-
 function parseBool(stringVal) {
     return !(stringVal === false || stringVal === "false");
 }
@@ -26,11 +13,11 @@ function tableSort(column) {
     const rows = Array.from($("#tablesort").rows);
     const shortenedRows = rows.slice(1, rows.length - 2);
     
-    const sortedText = shortenedRows.map(function(row) {
+    const sortedText = shortenedRows.map((row) => {
          return row.cells[column].textContent;
     }).sort();
     
-    shortenedRows.map(function(row, index) {
+    shortenedRows.map((row, index) => {
         row.cells[column].textContent = sortedText[index];
     });
 
@@ -40,7 +27,7 @@ function tableSort(column) {
 	if ((pcolumn == column) && !toggleOn) {
  		document.cookie = `pcolumn=${pcolumn}`;
 
-        shortenedRows.map(function(row, index) {
+        shortenedRows.map((row, index) => {
             row.cells[column].textContent = sortedText.reverse()[index];
         });
 	}
@@ -49,13 +36,13 @@ function tableSort(column) {
 function readCookie(name) {
 	const cookieArray = document.cookie.split(';');
     
-    return cookieArray.reduce(function(retVal, cookie) {
+    return cookieArray.reduce((retVal, cookie) => {
         if (cookie.trim().startsWith(name)) retVal = cookie.trim().split("=")[1];
         return retVal;
     }, null);    
 }
 
-document.addEventListener("page:change", function() {
+document.addEventListener("page:change", function(){
 	if ($('#index')) {
 		// Use cookies to initially sort table
 		pcolumn = readCookie("pcolumn");
