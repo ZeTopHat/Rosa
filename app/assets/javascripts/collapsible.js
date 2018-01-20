@@ -1,10 +1,10 @@
 // Function to allow for collapsible content
 function collapsible(idHash) {
-    $.each(idHash, (key, value) => {
+    $.each(idHash, function(key, value) {
         let elements = $(`#${key}`).next().children();
 
         // Use 'map' to iterate over elements instead of for-loop and use ternaries to assign conditional values
-        elements.map((element) => {
+        elements.map(function(element) {
             value ? element.style.display = '' : element.style.display = 'none'
         });
 
@@ -29,7 +29,7 @@ document.addEventListener("page:change", function() {
             ids.push(id);
         });
 
-        ids.map((singleId) => {
+        ids.map(function(singleId) {
             let collapsibleIdCookie;
             let expansion = parseBool(readCookie(`expansion${singleId}`));
             if (collapsibleIdCookie = readCookie(`collapsibleId${singleId}`))  idHash[collapsibleIdCookie] = expansion; 
