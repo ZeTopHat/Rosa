@@ -1,0 +1,7 @@
+rake users_update
+
+For new users - 
+
+rake refresh_data
+
+

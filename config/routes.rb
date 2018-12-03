@@ -16,8 +16,10 @@ Rails.application.routes.draw do
   get 'service_request/refresh'
   get 'team', :to => 'team#oncall'
   get 'team/oncall'
+  get 'team/newoncall'
   get 'team/siebelmatic'
   get 'team/sla'
   get 'team/wallboard'
+  get 'team/suseexchange'
 
 end

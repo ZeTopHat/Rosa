@@ -21,6 +21,14 @@ task :refresh_srs => :environment do
     read_content = open("#{conf_json["sr_info"]}#{request.number}") { |f| f.read.force_encoding("ISO-8859-1").encode("utf-8", replace: nil) }
 
     # unless the rosa db still matched the proetus db, update the rosa db to match the proetus db
+    unless ( request.briefdes == sr_content["SR_TITLE"] )
+		  puts "Updated #{request.number} brief description"
+		  request.update_attribute(:briefdes, sr_content["SR_TITLE"] )
+    end
+    unless ( request.longdes == sr_content["DESC_TEXT"] )
+		  puts "Updated #{request.number} detailed description"
+		  request.update_attribute(:longdes, sr_content["DESC_TEXT"] )
+    end
     unless ( request.lastact == sr_content["X_LAST_ACT_COMMENT"] )
       puts "Updated #{request.number} last act"
       request.update_attribute(:lastact, sr_content["X_LAST_ACT_COMMENT"])
