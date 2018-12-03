@@ -4,11 +4,11 @@ This is a queue monitoring and assignment tool used in production internally by 
 
 ## Getting Started
 
-These instructions will get internal SUSE employees a copy of the project up and running on a local SLES 12 SP1 machine for development and testing purposes. I imagine future service packs on the same major version will basically stay the same. 
+These instructions will get internal SUSE employees a copy of the project up and running on a local SLES 12 SP3 machine for development and testing purposes. I imagine future service packs on the same major version will basically stay the same. 
 
 ### Prerequisites
 
-Make sure you are fully patched on a SLES 12 SP1. You will also need the SLE-Module-Web-Scripting12-Updates and SLE-SDK12-SP1-Pool add-on repositories. Lastly, you will need a custom repository for node.js. Ill get into the specifics of that in the installation process.
+Make sure you are fully patched on a SLES 12 SP3. You will also need the SLE-Module-Web-Scripting12-Updates and SLE-SDK12-SP3 add-on repositories. Lastly, you will need a custom repository for node.js. Ill get into the specifics of that in the installation process.
 
 Access to internal tools will be a necessity: siebel, proetus, qmon
 
@@ -16,10 +16,11 @@ Access to internal tools will be a necessity: siebel, proetus, qmon
 rosa@rni:~> zypper ls
 # | Alias                                                        | Name                                                         | Enabled | GPG Check | Refresh | Type  
 --+--------------------------------------------------------------+--------------------------------------------------------------+---------+-----------+---------+-------
-1 | SUSE_Linux_Enterprise_Server_12_SP1_x86_64                   | SUSE_Linux_Enterprise_Server_12_SP1_x86_64                   | Yes     | ----      | Yes     | ris   
-2 | SUSE_Linux_Enterprise_Software_Development_Kit_12_SP1_x86_64 | SUSE_Linux_Enterprise_Software_Development_Kit_12_SP1_x86_64 | Yes     | ----      | Yes     | ris   
+1 | SUSE_Linux_Enterprise_Server_12_SP3_x86_64                   | SUSE_Linux_Enterprise_Server_12_SP3_x86_64                   | Yes     | ----      | Yes     | ris   
+2 | SUSE_Linux_Enterprise_Software_Development_Kit_12_SP3_x86_64 | SUSE_Linux_Enterprise_Software_Development_Kit_12_SP3_x86_64 | Yes     | ----      | Yes     | ris   
 3 | Web_and_Scripting_Module_12_x86_64                           | Web_and_Scripting_Module_12_x86_64                           | Yes     | ----      | Yes     | ris   
-4 | NodeJS                                                       | NodeJS                                                       | Yes     | (r ) Yes  | No      | rpm-md
+4 | Collective                                                   | Collective                                                   | Yes     | (r ) Yes  | No      | rpm-md
+5 | NodeJS                                                       | NodeJS                                                       | Yes     | (r ) Yes  | No      | rpm-md
 ```
 
 ### Installing
@@ -46,9 +47,10 @@ From there you should be able to run a rails command.
 
 ```
 rosa@rni:~> rails -v
-Rails 4.2.4
+Rails 4.2.7.1
+
 ```
-Next add this custom repo so that you can install nodejs. If you arent using SLES 12 SP1 youll need to find an equivalant that will work for your environment.
+Next add this custom repo so that you can install nodejs. If you arent using SLES 12 SP3 youll need to find an equivalant that will work for your environment.
 
 ```
 rosa@rni:~> cat /etc/zypp/repos.d/NodeJS.repo 
@@ -98,7 +100,9 @@ ExecStop=/bin/kill -s QUIT $MAINPID
 WantedBy=multi-user.target
 ```
 
-Make sure that when you extracted the Rosa files that they are owned by the user youve configured nginx to use so that it can access properly.
+At this point you'll want to make sure to have the Rosa files extracted and available at the desired location. Make sure that when you extracted the Rosa files that they are owned by the user youve configured nginx to use so that it can access properly.
+
+* Note: The Rosa code does not include the actual database to keep SR data confidential. This will need to be retreived by the internal employee by copying the database from a working Rosa or Rosa Clone instance to your new instance.
 
 For Ruby on Rails in production you want to have the secret used for verifying signed cookies set in a different location than the file itself. You'll see in the config/secrets.yml that it points to an environment variable. You can place it into the bash environment variable:
 
